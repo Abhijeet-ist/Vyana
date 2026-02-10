@@ -717,8 +717,8 @@ export const crisisResources = [
     type: "breathing" as const,
   },
   {
-    name: "Grounding Exercise",
-    description: "A 5-4-3-2-1 sensory grounding technique",
+    name: "Contact Support",
+    description: "A support contact option",
     contact: "Available in-app",
     type: "grounding" as const,
   },

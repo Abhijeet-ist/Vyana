@@ -7,6 +7,10 @@
 # testing
 /coverage
 
+mental_index/
+*.faiss
+*.pkl
+
 # next.js
 /.next/
 /out/

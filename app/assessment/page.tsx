@@ -46,7 +46,7 @@ export default function AssessmentPage() {
   }
 
   const handleAnswer = useCallback(
-    (score: number) => {
+    async (score: number) => {
       addAnswer({ questionId: currentQuestion.id, score });
 
       if (currentIndex < totalQuestions - 1) {
@@ -64,13 +64,19 @@ export default function AssessmentPage() {
         const profile = calculateStressProfile(allAnswers, onboardingSelection);
         setStressProfile(profile);
         
-        // Generate ML-based recommendations
-        const recommendations = generatePersonalizedRecommendations(
-          allAnswers,
-          profile,
-          onboardingSelection
-        );
-        setPersonalizedRecommendations(recommendations);
+        // Generate ML-based recommendations with Spotify integration
+        try {
+          console.log('Generating personalized recommendations...');
+          const recommendations = await generatePersonalizedRecommendations(
+            allAnswers,
+            profile,
+            onboardingSelection
+          );
+          console.log('Recommendations generated:', recommendations);
+          setPersonalizedRecommendations(recommendations);
+        } catch (error) {
+          console.error('Failed to generate recommendations:', error);
+        }
         
         router.push("/results");
       }
@@ -82,7 +88,9 @@ export default function AssessmentPage() {
       currentQuestion,
       router,
       setStressProfile,
+      setPersonalizedRecommendations,
       totalQuestions,
+      onboardingSelection,
     ]
   );
 

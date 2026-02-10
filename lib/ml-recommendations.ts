@@ -6,6 +6,7 @@ import {
   type BookRecommendation, 
   type MusicRecommendation 
 } from "./datasets";
+import { spotifyService } from "./spotify-service";
 
 export interface Recommendation {
   books: BookRecommendation[];
@@ -176,8 +177,34 @@ export class MLRecommendationEngine {
     return diversifyRecompendations(sortedBooks, limit);
   }
 
-  // Generate music recommendations
-  generateMusicRecommendations(limit: number = 4): MusicRecommendation[] {
+  // Generate music recommendations using Spotify API
+  async generateMusicRecommendations(limit: number = 3): Promise<MusicRecommendation[]> {
+    try {
+      // First try to get recommendations from Spotify
+      console.log('Fetching music recommendations from Spotify...');
+      const spotifyRecommendations = await spotifyService.getRecommendations(
+        this.emotionalState,
+        this.userProfile,
+        limit
+      );
+      
+      if (spotifyRecommendations.length > 0) {
+        console.log(`Got ${spotifyRecommendations.length} Spotify recommendations`);
+        return spotifyRecommendations;
+      }
+      
+      // Fallback to static dataset if Spotify fails
+      console.warn('Spotify failed, using fallback dataset');
+      return this.generateFallbackMusic(limit);
+      
+    } catch (error) {
+      console.error('Spotify recommendation failed:', error);
+      return this.generateFallbackMusic(limit);
+    }
+  }
+
+  // Fallback music recommendations using static dataset
+  private generateFallbackMusic(limit: number = 3): MusicRecommendation[] {
     const scoredMusic = musicDataset.map(music => {
       // 1. Profile similarity (35% weight)
       const profileSimilarity = calculateWeightedSimilarity(
@@ -222,22 +249,22 @@ export class MLRecommendationEngine {
     return (answerCompleteness * 0.4 + consistency * 0.4 + stateClarity * 0.2) * 100;
   }
 
-  // Generate complete recommendations with confidence
-  generateRecommendations(): Recommendation {
+  // Generate complete recommendations with confidence (now async for Spotify)
+  async generateRecommendations(): Promise<Recommendation> {
     return {
       books: this.generateBookRecommendations(3),
-      music: this.generateMusicRecommendations(4),
+      music: await this.generateMusicRecommendations(3),
       confidenceScore: this.calculateConfidence()
     };
   }
 }
 
-// Factory function for easy use
-export function generatePersonalizedRecommendations(
+// Factory function for easy use (now async for Spotify integration)
+export async function generatePersonalizedRecommendations(
   answers: AssessmentAnswer[],
   profile: StressProfile,
   emotionalState: OnboardingSelection
-): Recommendation {
+): Promise<Recommendation> {
   const engine = new MLRecommendationEngine(answers, profile, emotionalState);
-  return engine.generateRecommendations();
+  return await engine.generateRecommendations();
 }

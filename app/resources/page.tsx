@@ -258,9 +258,22 @@ export default function ResourcesPage() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-medium" style={{ color: "hsl(135 12% 26% / 0.8)" }}>
-                        {music.title}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-medium" style={{ color: "hsl(135 12% 26% / 0.8)" }}>
+                          {music.title}
+                        </h3>
+                        {music.source === 'api' && (
+                          <span 
+                            className="px-1.5 py-0.5 rounded text-xs font-medium"
+                            style={{ 
+                              backgroundColor: "hsl(142 76% 28% / 0.1)", 
+                              color: "hsl(142 76% 28%)" 
+                            }}
+                          >
+                            Spotify
+                          </span>
+                        )}
+                      </div>
                       <span className="text-xs" style={{ color: "hsl(135 12% 26% / 0.5)" }}>
                         {music.duration}
                       </span>

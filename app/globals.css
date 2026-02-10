@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ---- Warm Organic Palette (from reference) ---- */
+    /* Silver Lake (warm neutral base) */
+    --silver-lake: 36 33% 93%;
+    /* Lagoon (calming blue-green) */
+    --lagoon: 185 25% 75%;
+    /* Seaweed (primary text - never pure black) */
+    --seaweed: 135 12% 26%;
+    /* Wheat (warm background) */
+    --wheat: 36 33% 93%;
+    /* Melon (stress/warm accent) */
+    --melon: 17 55% 62%;
+    /* Lavender (reflective/calm) */
+    --lavender: 260 18% 84%;
+
+    /* ---- Emotional State Backgrounds ---- */
+    --bg-calm: 185 25% 90%; /* Lagoon + Lavender overlay */
+    --bg-warm: 36 45% 91%; /* Wheat + Melon tint (5-8% overlay) */
+    --bg-neutral: 36 33% 93%; /* Silver Lake / Wheat mix */
+    --bg-reflection: 260 25% 88%; /* Lavender-heavy background */
+    --bg-crisis: 135 12% 26%; /* Seaweed + high contrast */
+
+    /* ---- Legacy Design Tokens (maintained for compatibility) ---- */
+    --olive: 135 12% 26%;
+    --sage: 105 15% 43%;
+    --cream: 36 33% 93%;
+    --warm-beige: 33 30% 86%;
+    --wheat-card: 53 55% 77%;
+    --sage-card: 108 22% 80%;
+    --pink-card: 15 27% 86%;
+
+    /* ---- Semantic Design Tokens ---- */
+    --background: var(--bg-neutral);
+    --foreground: var(--seaweed);
+    --card: 0 0% 100%;
+    --card-foreground: 135 12% 26%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 135 12% 26%;
+    --primary: 135 12% 26%;
+    --primary-foreground: 36 33% 93%;
+    --secondary: 108 22% 80%;
+    --secondary-foreground: 135 12% 26%;
+    --muted: 33 30% 89%;
+    --muted-foreground: 135 10% 45%;
+    --accent: 260 18% 84%;
+    --accent-foreground: 135 12% 26%;
+    --destructive: 17 55% 62%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 33 20% 85%;
+    --input: 33 20% 85%;
+    --ring: 105 15% 43%;
+
+    --chart-1: 105 15% 43%;
+    --chart-2: 260 18% 84%;
+    --chart-3: 53 55% 77%;
+    --chart-4: 17 55% 62%;
+    --chart-5: 108 22% 80%;
+
+    --radius: 1.25rem;
+
+    --sidebar-background: 36 33% 95%;
+    --sidebar-foreground: 135 12% 26%;
+    --sidebar-primary: 105 15% 43%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 108 22% 88%;
+    --sidebar-accent-foreground: 135 12% 26%;
+    --sidebar-border: 33 20% 85%;
+    --sidebar-ring: 105 15% 43%;
+  }
+
+  /* ---- Motion System Variables ---- */
+  :root {
+    --motion-duration-default: 0.4s;
+    --motion-duration-slow: 0.6s;
+    --motion-ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+    --motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --motion-hover-lift: -4px;
+    --motion-ripple-duration: 300ms;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  
+  /* Design System Utilities */
+  .card-hover {
+    transition-property: transform, box-shadow, background-color;
+    transition-duration: var(--motion-duration-default);
+    transition-timing-function: var(--motion-ease-out);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(var(--motion-hover-lift));
+  }
+  
+  .soft-focus {
+    outline: none;
+    transition: box-shadow var(--motion-duration-default) var(--motion-ease-out);
+  }
+  
+  .soft-focus:focus-visible {
+    box-shadow: 
+      0 0 0 2px hsl(var(--bg-neutral)),
+      0 0 0 4px hsl(var(--sage) / 0.3);
+  }
+  
+  .glass-overlay {
+    backdrop-filter: blur(20px);
+    background: linear-gradient(
+      135deg, 
+      hsl(255 255% 255% / 0.1) 0%, 
+      hsl(255 255% 255% / 0.05) 100%
+    );
+    border: 1px solid hsl(255 255% 255% / 0.2);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--sage) / 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--sage) / 0.35);
+}

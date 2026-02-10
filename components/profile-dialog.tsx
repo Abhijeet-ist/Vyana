@@ -4,6 +4,7 @@ import { signInWithPopup } from "firebase/auth";
 import { AnimatePresence, motion } from "framer-motion";
 import { Chrome, Github, LogOut, Settings, User } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { auth, githubProvider, googleProvider } from "@/lib/firebase";
@@ -70,6 +71,7 @@ const buttonHoverVariants = {
 export function ProfileDialog() {
   const { profileModalOpen, setProfileModalOpen, user, isAuthenticated, setUser, logout } = useAppStore();
   const [loadingProvider, setLoadingProvider] = useState<"google" | "github" | null>(null);
+  const router = useRouter();
 
   const handleProviderLogin = async (provider: "google" | "github") => {
     setLoadingProvider(provider);
@@ -101,6 +103,11 @@ export function ProfileDialog() {
   const handleLogout = () => {
     logout();
     setProfileModalOpen(false);
+  };
+
+  const handleAccountSettings = () => {
+    setProfileModalOpen(false);
+    router.push('/account-settings');
   };
 
   return (
@@ -245,6 +252,7 @@ export function ProfileDialog() {
                   whileHover="hover"
                   whileTap="tap"
                   variants={buttonHoverVariants}
+                  onClick={handleAccountSettings}
                   className="w-full p-4 rounded-2xl flex items-center gap-4 text-left border-0 transition-all duration-300"
                   style={{
                     background: 'hsl(255 255% 255% / 0.7)',

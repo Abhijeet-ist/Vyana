@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Phone, MessageCircle, Building2, Wind, Hand, ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/use-app-store";
 import { crisisResources } from "@/lib/insights";
 import { Button } from "@/components/ui/button";
@@ -266,11 +267,18 @@ function SupportForm({ onBack }: { onBack: () => void }) {
 }
 
 export function CrisisModal() {
+  const router = useRouter();
   const { crisisModalOpen, setCrisisModalOpen } = useAppStore();
   const [showSupportForm, setShowSupportForm] = useState(false);
 
   const handleGroundingClick = () => {
     setShowSupportForm(true);
+  };
+
+  const handleBreathingClick = () => {
+    setCrisisModalOpen(false);
+    setShowSupportForm(false);
+    router.push("/breathing");
   };
 
   return (
@@ -335,13 +343,23 @@ export function CrisisModal() {
                       {crisisResources.map((resource) => {
                         const Icon = iconMap[resource.type] || MessageCircle;
                         const isGrounding = resource.type === 'grounding';
+                        const isBreathing = resource.type === 'breathing';
+                        const isClickable = isGrounding || isBreathing;
+                        
+                        const handleResourceClick = () => {
+                          if (isGrounding) {
+                            handleGroundingClick();
+                          } else if (isBreathing) {
+                            handleBreathingClick();
+                          }
+                        };
                         
                         return (
                           <div
                             key={resource.name}
-                            className={`flex items-start gap-3 rounded-2xl p-4 transition-all ${isGrounding ? 'cursor-pointer hover:shadow-md' : ''}`}
+                            className={`flex items-start gap-3 rounded-2xl p-4 transition-all ${isClickable ? 'cursor-pointer hover:shadow-md hover:scale-[1.02]' : ''}`}
                             style={{ backgroundColor: "hsl(36 33% 93%)" }}
-                            onClick={isGrounding ? handleGroundingClick : undefined}
+                            onClick={isClickable ? handleResourceClick : undefined}
                           >
                             <div
                               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -357,7 +375,9 @@ export function CrisisModal() {
                                 {resource.description}
                               </span>
                               <span className="mt-1 text-xs font-medium" style={{ color: "hsl(105 15% 43%)" }}>
-                                {isGrounding ? "Click to access support form" : resource.contact}
+                                {isGrounding ? "Click to access support form" : 
+                                 isBreathing ? "Click to start breathing exercise" : 
+                                 resource.contact}
                               </span>
                             </div>
                           </div>

@@ -10,6 +10,8 @@ import {
   Activity,
   HeartHandshake,
 } from "lucide-react";
+import { useAppStore } from "@/store/use-app-store";
+import { LandingPage } from "@/components/landing-page";
 
 const moodIcons = [
   { label: "Happy", color: "#E8DFA0" },
@@ -26,6 +28,12 @@ const trustItems = [
 ];
 
 export default function HomePage() {
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+
+  if (!isAuthenticated) {
+    return <LandingPage />;
+  }
+
   return (
     <motion.div
       variants={staggerContainer}
@@ -78,7 +86,7 @@ export default function HomePage() {
           {moodIcons.map((mood) => (
             <Link
               key={mood.label}
-              href="/check-in"
+              href={`/mood?mood=${mood.label.toLowerCase()}`}
               className="flex flex-col items-center gap-2"
             >
               <div

@@ -97,10 +97,23 @@ export function Header() {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
                 transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-                className="text-sm font-medium tracking-wide"
-                style={{ color: 'hsl(var(--wheat))' }}
+                className="h-full w-full overflow-hidden rounded-full"
               >
-                {user.name.charAt(0).toUpperCase()}
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="h-full w-full rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span
+                    className="flex h-full w-full items-center justify-center text-sm font-medium tracking-wide"
+                    style={{ color: 'hsl(var(--wheat))' }}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </motion.div>
             ) : (
               <motion.div

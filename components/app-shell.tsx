@@ -7,10 +7,24 @@ import { Header } from "@/components/header";
 import { BottomNav } from "@/components/bottom-nav";
 import { CrisisFAB } from "@/components/crisis-fab";
 import { CrisisModal } from "@/components/crisis-modal";
+import { ProfileDialog } from "@/components/profile-dialog";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const highContrast = useAppStore((s) => s.highContrast);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
 
+  /* ——— Unauthenticated: render children directly (landing page handles its own layout) ——— */
+  if (!isAuthenticated) {
+    return (
+      <>
+        {children}
+        <ProfileDialog />
+        <CrisisModal />
+      </>
+    );
+  }
+
+  /* ——— Authenticated: full app shell ——— */
   return (
     <div
       className={`min-h-screen ${highContrast ? "contrast-125" : ""}`}

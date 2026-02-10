@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "name": "Abhijeet ist",
+    "email": "kumarpallav4321@gmail.com",
+    "id": "3zb93sLtVBh43OGf3QcmNWb2GaR2",
+    "joinDate": "2026-02-10T22:59:56.420Z"
+  },
+  "assessmentData": {
+    "answers": [],
+    "stressProfile": null,
+    "recommendations": null
+  },
+  "preferences": {
+    "notifications": {
+      "assessmentReminders": true,
+      "weeklyInsights": true,
+      "emergencyAlerts": true
+    },
+    "privacy": {
+      "dataCollection": false,
+      "analytics": false,
+      "personalizedAds": false
+    },
+    "reducedMotion": false,
+    "highContrast": false
+  },
+  "exportDate": "2026-02-10T22:59:56.420Z"
+}

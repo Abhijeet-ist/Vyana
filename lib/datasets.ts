@@ -42,7 +42,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Evidence-based strategies for managing anxiety and stress",
     emotionalProfile: { stress: 4.5, cognitive: 3.8, behavior: 4.2 },
     targetMoods: ["overwhelmed", "anxious", "stressed"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b2",
@@ -133,7 +133,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Understanding and healing trauma",
     emotionalProfile: { stress: 4.2, cognitive: 4.5, behavior: 3.8 },
     targetMoods: ["overwhelmed", "anxious", "lonely"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b11",
@@ -144,7 +144,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Finding purpose even in the darkest times",
     emotionalProfile: { stress: 3.6, cognitive: 4.7, behavior: 3.2 },
     targetMoods: ["hopeless", "confused", "lonely"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b12",
@@ -155,7 +155,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "The clinically proven drug-free treatment for depression",
     emotionalProfile: { stress: 4.3, cognitive: 4.6, behavior: 4.0 },
     targetMoods: ["anxious", "overwhelmed", "depressed"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b13",
@@ -166,7 +166,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Rules for focused success in a distracted world",
     emotionalProfile: { stress: 2.4, cognitive: 4.4, behavior: 4.7 },
     targetMoods: ["burned-out", "confused", "frustrated"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b14",
@@ -177,7 +177,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Embracing life with compassion and presence",
     emotionalProfile: { stress: 2.2, cognitive: 3.5, behavior: 2.8 },
     targetMoods: ["anxious", "ashamed", "overwhelmed"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b15",
@@ -188,7 +188,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "The Japanese secret to a long and happy life",
     emotionalProfile: { stress: 2.0, cognitive: 3.9, behavior: 3.4 },
     targetMoods: ["confused", "hopeful", "just-checking"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b16",
@@ -199,7 +199,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "How the courage to be vulnerable transforms lives",
     emotionalProfile: { stress: 3.0, cognitive: 4.2, behavior: 3.9 },
     targetMoods: ["frustrated", "lonely", "hopeful"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b17",
@@ -210,7 +210,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "How to stop struggling and start living",
     emotionalProfile: { stress: 3.8, cognitive: 4.1, behavior: 3.6 },
     targetMoods: ["anxious", "overwhelmed", "confused"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b18",
@@ -221,7 +221,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "How to use neuroscience to calm anxiety",
     emotionalProfile: { stress: 4.5, cognitive: 4.4, behavior: 4.1 },
     targetMoods: ["anxious", "overwhelmed", "stressed"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b19",
@@ -232,7 +232,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "A practical guide to personal freedom",
     emotionalProfile: { stress: 1.9, cognitive: 3.2, behavior: 2.7 },
     targetMoods: ["peaceful", "hopeful", "just-checking"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b20",
@@ -243,7 +243,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Master your mind and defy the odds",
     emotionalProfile: { stress: 3.7, cognitive: 4.0, behavior: 4.9 },
     targetMoods: ["frustrated", "exhausted", "burned-out"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b21",
@@ -254,7 +254,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Uncovering the real causes of depression and unexpected solutions",
     emotionalProfile: { stress: 4.1, cognitive: 4.3, behavior: 3.5 },
     targetMoods: ["lonely", "overwhelmed", "confused"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b22",
@@ -265,7 +265,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Heart advice for difficult times",
     emotionalProfile: { stress: 2.5, cognitive: 3.6, behavior: 2.9 },
     targetMoods: ["overwhelmed", "hopeless", "anxious"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b23",
@@ -276,7 +276,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "How your mindset shapes success and happiness",
     emotionalProfile: { stress: 2.7, cognitive: 4.5, behavior: 4.2 },
     targetMoods: ["confused", "frustrated", "hopeful"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b24",
@@ -287,7 +287,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Practical tools for emotional resilience and mental strength",
     emotionalProfile: { stress: 3.9, cognitive: 4.2, behavior: 4.0 },
     targetMoods: ["overwhelmed", "anxious", "burned-out"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b25",
@@ -298,7 +298,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "A collection of gentle reminders for difficult days",
     emotionalProfile: { stress: 1.6, cognitive: 2.8, behavior: 2.3 },
     targetMoods: ["lonely", "exhausted", "hopeful"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b26",
@@ -309,7 +309,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Recognize your patterns, heal from trauma, and create your self",
     emotionalProfile: { stress: 4.2, cognitive: 4.4, behavior: 4.1 },
     targetMoods: ["confused", "overwhelmed", "frustrated"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b27",
@@ -320,7 +320,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Transforming self-sabotage into self-mastery",
     emotionalProfile: { stress: 3.3, cognitive: 4.1, behavior: 3.8 },
     targetMoods: ["confused", "frustrated", "hopeful"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b28",
@@ -331,7 +331,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "The power of introverts in a world that can't stop talking",
     emotionalProfile: { stress: 2.6, cognitive: 4.0, behavior: 3.1 },
     targetMoods: ["lonely", "confused", "peaceful"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b29",
@@ -342,7 +342,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "Get unstuck, embrace change, and thrive in work and life",
     emotionalProfile: { stress: 3.5, cognitive: 4.3, behavior: 4.0 },
     targetMoods: ["overwhelmed", "frustrated", "confused"],
-    source: 'curated' as const
+    // source: 'curated' as const
   },
   {
     id: "b30",
@@ -353,7 +353,7 @@ export const bookDataset: BookRecommendation[] = [
     description: "The pathway of surrender and inner peace",
     emotionalProfile: { stress: 1.7, cognitive: 3.0, behavior: 2.5 },
     targetMoods: ["peaceful", "hopeful", "overwhelmed"],
-    source: 'curated' as const
+    // source: 'curated' as const
   }
 ];
 

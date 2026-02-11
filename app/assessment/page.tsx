@@ -73,7 +73,7 @@ export default function AssessmentPage() {
             onboardingSelection
           );
           console.log('Recommendations generated:', recommendations);
-          setPersonalizedRecommendations(recommendations);
+        //   setPersonalizedRecommendations(recommendations);
         } catch (error) {
           console.error('Failed to generate recommendations:', error);
         }

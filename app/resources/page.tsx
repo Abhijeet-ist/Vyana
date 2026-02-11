@@ -17,35 +17,40 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 const resourceCategories = [
   {
     title: "Crisis Support",
-    description: "Immediate help when you need it",
+    description: "तत्काल सहायता - Immediate help when you need it",
     icon: Phone,
     cardBg: "hsl(17 55% 62% / 0.15)",
     items: [
       {
-        name: "988 Suicide & Crisis Lifeline",
-        detail: "Call or text 988 - free, confidential, 24/7",
-        link: "tel:988",
+        name: "AASRA - आसरा",
+        detail: "91-22-27546669 - 24/7 suicide prevention helpline",
+        link: "tel:912227546669",
       },
       {
-        name: "Crisis Text Line",
-        detail: "Text HOME to 741741",
-        link: "sms:741741",
+        name: "Vandrevala Foundation",
+        detail: "1860-2662-345 / 9820466726 - Free, confidential counseling",
+        link: "tel:18602662345",
       },
       {
-        name: "SAMHSA Helpline",
-        detail: "1-800-662-4357 - treatment referrals",
-        link: "tel:18006624357",
+        name: "iCall - Tata Institute",
+        detail: "9152987821 - Mon-Sat, 8 AM to 10 PM",
+        link: "tel:919152987821",
+      },
+      {
+        name: "NIMHANS Helpline",
+        detail: "080-46110007 - Mental health support, Bangalore",
+        link: "tel:08046110007",
       },
     ],
   },
   {
     title: "Self-Care Techniques",
-    description: "Gentle practices for regulation",
+    description: "आत्म-देखभाल - Gentle practices for regulation",
     icon: Wind,
     cardBg: "hsl(108 22% 80% / 0.35)",
     items: [
       {
-        name: "Box Breathing",
+        name: "Pranayama - Box Breathing",
         detail: "Inhale 4s, hold 4s, exhale 4s, hold 4s. Repeat 4 times.",
         link: null,
       },
@@ -56,32 +61,43 @@ const resourceCategories = [
         link: null,
       },
       {
-        name: "Body Scan",
+        name: "Shavasana - Body Scan",
         detail:
           "Starting from your toes, slowly notice each part of your body.",
+        link: null,
+      },
+      {
+        name: "Mindful Walking",
+        detail:
+          "Take a slow walk in your campus garden or hostel corridor, focusing on each step.",
         link: null,
       },
     ],
   },
   {
     title: "Campus Resources",
-    description: "Support within your university",
+    description: "College/University में Support",
     icon: Building2,
     cardBg: "hsl(260 18% 84% / 0.35)",
     items: [
       {
-        name: "Counseling Center",
-        detail: "Most campuses offer free sessions. Check your website.",
+        name: "Student Counseling Service",
+        detail: "IITs, NITs, and most universities offer free counseling. Visit your Student Affairs office.",
         link: null,
       },
       {
-        name: "Wellness Programs",
-        detail: "Group workshops, peer support, and activities.",
+        name: "NSS/NCC Programs",
+        detail: "Community service and wellness activities through campus clubs.",
         link: null,
       },
       {
-        name: "Academic Support",
-        detail: "Accommodations for mental health-related needs.",
+        name: "Dean of Students",
+        detail: "Academic accommodations and support for exam stress, family pressures.",
+        link: null,
+      },
+      {
+        name: "Hostel Wardens",
+        detail: "First point of contact for emotional support and guidance in residential campuses.",
         link: null,
       },
     ],
@@ -93,18 +109,23 @@ const resourceCategories = [
     cardBg: "hsl(53 55% 77% / 0.35)",
     items: [
       {
-        name: "Cognitive Patterns",
-        detail: "Learn about common thinking patterns and their effects.",
+        name: "Academic Pressure",
+        detail: "Understanding competitive exam stress, parental expectations, and career anxiety.",
         link: null,
       },
       {
-        name: "Stress Response",
-        detail: "Understanding fight, flight, freeze, and fawn.",
+        name: "Cultural Context",
+        detail: "Balancing traditional values with modern mental health practices.",
         link: null,
       },
       {
         name: "Building Resilience",
-        detail: "Small, evidence-based steps toward steadiness.",
+        detail: "Small, evidence-based steps toward emotional steadiness during college years.",
+        link: null,
+      },
+      {
+        name: "Peer Support",
+        detail: "Building support networks in hostel life and study groups.",
         link: null,
       },
     ],

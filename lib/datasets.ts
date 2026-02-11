@@ -45,7 +45,7 @@ export const bookDataset: BookRecommendation[] = [
     source: 'curated' as const
   },
   {
-    id: "b2", 
+    id: "b2",
     title: "Option B",
     author: "Sheryl Sandberg & Adam Grant",
     genre: "Memoir/Psychology",
@@ -58,7 +58,7 @@ export const bookDataset: BookRecommendation[] = [
   {
     id: "b3",
     title: "The Gifts of Imperfection",
-    author: "Brené Brown", 
+    author: "Brené Brown",
     genre: "Psychology",
     tags: ["shame", "vulnerability", "courage", "authenticity"],
     description: "Letting go of who you think you're supposed to be",
@@ -142,7 +142,228 @@ export const bookDataset: BookRecommendation[] = [
     emotionalProfile: { stress: 4.2, cognitive: 4.5, behavior: 3.8 },
     targetMoods: ["overwhelmed", "anxious", "lonely"],
     source: 'curated' as const
+  },
+  {
+    id: "b11",
+    title: "Man's Search for Meaning",
+    author: "Viktor E. Frankl",
+    genre: "Psychology/Philosophy",
+    tags: ["meaning", "resilience", "suffering", "hope"],
+    description: "Finding purpose even in the darkest times",
+    emotionalProfile: { stress: 3.6, cognitive: 4.7, behavior: 3.2 },
+    targetMoods: ["hopeless", "confused", "lonely"],
+    source: 'curated' as const
+  },
+  {
+    id: "b12",
+    title: "Feeling Good",
+    author: "David D. Burns",
+    genre: "Psychology/CBT",
+    tags: ["cbt", "depression", "thinking", "self-help"],
+    description: "The clinically proven drug-free treatment for depression",
+    emotionalProfile: { stress: 4.3, cognitive: 4.6, behavior: 4.0 },
+    targetMoods: ["anxious", "overwhelmed", "depressed"],
+    source: 'curated' as const
+  },
+  {
+    id: "b13",
+    title: "Deep Work",
+    author: "Cal Newport",
+    genre: "Productivity",
+    tags: ["focus", "concentration", "work", "clarity"],
+    description: "Rules for focused success in a distracted world",
+    emotionalProfile: { stress: 2.4, cognitive: 4.4, behavior: 4.7 },
+    targetMoods: ["burned-out", "confused", "frustrated"],
+    source: 'curated' as const
+  },
+  {
+    id: "b14",
+    title: "Radical Acceptance",
+    author: "Tara Brach",
+    genre: "Mindfulness/Psychology",
+    tags: ["acceptance", "self-compassion", "healing", "mindfulness"],
+    description: "Embracing life with compassion and presence",
+    emotionalProfile: { stress: 2.2, cognitive: 3.5, behavior: 2.8 },
+    targetMoods: ["anxious", "ashamed", "overwhelmed"],
+    source: 'curated' as const
+  },
+  {
+    id: "b15",
+    title: "Ikigai",
+    author: "Héctor García & Francesc Miralles",
+    genre: "Lifestyle/Psychology",
+    tags: ["purpose", "longevity", "meaning", "balance"],
+    description: "The Japanese secret to a long and happy life",
+    emotionalProfile: { stress: 2.0, cognitive: 3.9, behavior: 3.4 },
+    targetMoods: ["confused", "hopeful", "just-checking"],
+    source: 'curated' as const
+  },
+  {
+    id: "b16",
+    title: "Daring Greatly",
+    author: "Brené Brown",
+    genre: "Psychology",
+    tags: ["vulnerability", "courage", "connection", "growth"],
+    description: "How the courage to be vulnerable transforms lives",
+    emotionalProfile: { stress: 3.0, cognitive: 4.2, behavior: 3.9 },
+    targetMoods: ["frustrated", "lonely", "hopeful"],
+    source: 'curated' as const
+  },
+  {
+    id: "b17",
+    title: "The Happiness Trap",
+    author: "Russ Harris",
+    genre: "Psychology/ACT",
+    tags: ["acceptance", "values", "mindfulness", "mental health"],
+    description: "How to stop struggling and start living",
+    emotionalProfile: { stress: 3.8, cognitive: 4.1, behavior: 3.6 },
+    targetMoods: ["anxious", "overwhelmed", "confused"],
+    source: 'curated' as const
+  },
+  {
+    id: "b18",
+    title: "Rewire Your Anxious Brain",
+    author: "Catherine Pittman & Elizabeth Karle",
+    genre: "Neuroscience/Psychology",
+    tags: ["anxiety", "brain", "fear", "neuroscience"],
+    description: "How to use neuroscience to calm anxiety",
+    emotionalProfile: { stress: 4.5, cognitive: 4.4, behavior: 4.1 },
+    targetMoods: ["anxious", "overwhelmed", "stressed"],
+    source: 'curated' as const
+  },
+  {
+    id: "b19",
+    title: "The Four Agreements",
+    author: "Don Miguel Ruiz",
+    genre: "Spirituality",
+    tags: ["freedom", "beliefs", "peace", "self-awareness"],
+    description: "A practical guide to personal freedom",
+    emotionalProfile: { stress: 1.9, cognitive: 3.2, behavior: 2.7 },
+    targetMoods: ["peaceful", "hopeful", "just-checking"],
+    source: 'curated' as const
+  },
+  {
+    id: "b20",
+    title: "Can't Hurt Me",
+    author: "David Goggins",
+    genre: "Memoir/Motivation",
+    tags: ["discipline", "mental toughness", "resilience", "growth"],
+    description: "Master your mind and defy the odds",
+    emotionalProfile: { stress: 3.7, cognitive: 4.0, behavior: 4.9 },
+    targetMoods: ["frustrated", "exhausted", "burned-out"],
+    source: 'curated' as const
+  },
+  {
+    id: "b21",
+    title: "Lost Connections",
+    author: "Johann Hari",
+    genre: "Psychology/Social",
+    tags: ["depression", "connection", "society", "healing"],
+    description: "Uncovering the real causes of depression and unexpected solutions",
+    emotionalProfile: { stress: 4.1, cognitive: 4.3, behavior: 3.5 },
+    targetMoods: ["lonely", "overwhelmed", "confused"],
+    source: 'curated' as const
+  },
+  {
+    id: "b22",
+    title: "When Things Fall Apart",
+    author: "Pema Chödrön",
+    genre: "Mindfulness/Spirituality",
+    tags: ["uncertainty", "acceptance", "compassion", "healing"],
+    description: "Heart advice for difficult times",
+    emotionalProfile: { stress: 2.5, cognitive: 3.6, behavior: 2.9 },
+    targetMoods: ["overwhelmed", "hopeless", "anxious"],
+    source: 'curated' as const
+  },
+  {
+    id: "b23",
+    title: "Mindset",
+    author: "Carol S. Dweck",
+    genre: "Psychology",
+    tags: ["growth", "beliefs", "learning", "resilience"],
+    description: "How your mindset shapes success and happiness",
+    emotionalProfile: { stress: 2.7, cognitive: 4.5, behavior: 4.2 },
+    targetMoods: ["confused", "frustrated", "hopeful"],
+    source: 'curated' as const
+  },
+  {
+    id: "b24",
+    title: "Why Has Nobody Told Me This Before?",
+    author: "Dr. Julie Smith",
+    genre: "Mental Health",
+    tags: ["coping", "therapy", "emotional skills", "self-care"],
+    description: "Practical tools for emotional resilience and mental strength",
+    emotionalProfile: { stress: 3.9, cognitive: 4.2, behavior: 4.0 },
+    targetMoods: ["overwhelmed", "anxious", "burned-out"],
+    source: 'curated' as const
+  },
+  {
+    id: "b25",
+    title: "The Comfort Book",
+    author: "Matt Haig",
+    genre: "Reflection",
+    tags: ["comfort", "hope", "gentle", "mental health"],
+    description: "A collection of gentle reminders for difficult days",
+    emotionalProfile: { stress: 1.6, cognitive: 2.8, behavior: 2.3 },
+    targetMoods: ["lonely", "exhausted", "hopeful"],
+    source: 'curated' as const
+  },
+  {
+    id: "b26",
+    title: "How to Do the Work",
+    author: "Dr. Nicole LePera",
+    genre: "Psychology/Healing",
+    tags: ["trauma", "self-healing", "patterns", "growth"],
+    description: "Recognize your patterns, heal from trauma, and create your self",
+    emotionalProfile: { stress: 4.2, cognitive: 4.4, behavior: 4.1 },
+    targetMoods: ["confused", "overwhelmed", "frustrated"],
+    source: 'curated' as const
+  },
+  {
+    id: "b27",
+    title: "The Mountain Is You",
+    author: "Brianna Wiest",
+    genre: "Self-Reflection",
+    tags: ["self-sabotage", "growth", "healing", "clarity"],
+    description: "Transforming self-sabotage into self-mastery",
+    emotionalProfile: { stress: 3.3, cognitive: 4.1, behavior: 3.8 },
+    targetMoods: ["confused", "frustrated", "hopeful"],
+    source: 'curated' as const
+  },
+  {
+    id: "b28",
+    title: "Quiet",
+    author: "Susan Cain",
+    genre: "Psychology",
+    tags: ["introversion", "identity", "self-acceptance", "strength"],
+    description: "The power of introverts in a world that can't stop talking",
+    emotionalProfile: { stress: 2.6, cognitive: 4.0, behavior: 3.1 },
+    targetMoods: ["lonely", "confused", "peaceful"],
+    source: 'curated' as const
+  },
+  {
+    id: "b29",
+    title: "Emotional Agility",
+    author: "Susan David",
+    genre: "Psychology",
+    tags: ["emotions", "flexibility", "resilience", "values"],
+    description: "Get unstuck, embrace change, and thrive in work and life",
+    emotionalProfile: { stress: 3.5, cognitive: 4.3, behavior: 4.0 },
+    targetMoods: ["overwhelmed", "frustrated", "confused"],
+    source: 'curated' as const
+  },
+  {
+    id: "b30",
+    title: "Letting Go",
+    author: "David R. Hawkins",
+    genre: "Spirituality/Psychology",
+    tags: ["release", "peace", "emotions", "healing"],
+    description: "The pathway of surrender and inner peace",
+    emotionalProfile: { stress: 1.7, cognitive: 3.0, behavior: 2.5 },
+    targetMoods: ["peaceful", "hopeful", "overwhelmed"],
+    source: 'curated' as const
   }
+
 ];
 
 // Curated music dataset for different emotional states
@@ -279,7 +500,7 @@ export const musicDataset: MusicRecommendation[] = [
   },
   {
     id: "m11",
-    title: "Lost in the Light", 
+    title: "Lost in the Light",
     artist: "Bahamas",
     genre: "Indie Folk",
     mood: "contemplative",

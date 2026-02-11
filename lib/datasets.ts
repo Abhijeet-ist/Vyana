@@ -41,8 +41,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["anxiety", "stress", "workbook", "practical"],
     description: "Evidence-based strategies for managing anxiety and stress",
     emotionalProfile: { stress: 4.5, cognitive: 3.8, behavior: 4.2 },
-    targetMoods: ["overwhelmed", "anxious", "stressed"],
-    source: 'curated' as const
+    targetMoods: ["overwhelmed", "anxious", "stressed"]
   },
   {
     id: "b2", 
@@ -52,8 +51,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["resilience", "loss", "healing", "growth"],
     description: "Building resilience and finding joy after hardship",
     emotionalProfile: { stress: 3.2, cognitive: 4.1, behavior: 3.9 },
-    targetMoods: ["lonely", "exhausted", "frustrated"],
-    source: 'curated' as const
+    targetMoods: ["lonely", "exhausted", "frustrated"]
   },
   {
     id: "b3",
@@ -63,8 +61,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["shame", "vulnerability", "courage", "authenticity"],
     description: "Letting go of who you think you're supposed to be",
     emotionalProfile: { stress: 2.8, cognitive: 4.3, behavior: 3.6 },
-    targetMoods: ["confused", "overwhelmed", "frustrated"],
-    source: 'curated' as const
+    targetMoods: ["confused", "overwhelmed", "frustrated"]
   },
   {
     id: "b4",
@@ -74,8 +71,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["habits", "productivity", "behavior", "systems"],
     description: "Building good habits and breaking bad ones",
     emotionalProfile: { stress: 2.1, cognitive: 3.9, behavior: 4.8 },
-    targetMoods: ["burned-out", "confused", "just-checking"],
-    source: 'curated' as const
+    targetMoods: ["burned-out", "confused", "just-checking"]
   },
   {
     id: "b5",
@@ -85,8 +81,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["mindfulness", "presence", "meditation", "peace"],
     description: "A guide to spiritual enlightenment through mindfulness",
     emotionalProfile: { stress: 1.8, cognitive: 2.9, behavior: 2.4 },
-    targetMoods: ["peaceful", "hopeful", "just-checking"],
-    source: 'curated' as const
+    targetMoods: ["peaceful", "hopeful", "just-checking"]
   },
   {
     id: "b6",
@@ -96,8 +91,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["therapy", "connection", "vulnerability", "healing"],
     description: "A therapist's journey through her own therapy",
     emotionalProfile: { stress: 3.4, cognitive: 4.0, behavior: 3.1 },
-    targetMoods: ["lonely", "confused", "hopeful"],
-    source: 'curated' as const
+    targetMoods: ["lonely", "confused", "hopeful"]
   },
   {
     id: "b7",
@@ -107,8 +101,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["burnout", "stress", "women", "science"],
     description: "Science-based approach to recovering from burnout",
     emotionalProfile: { stress: 4.6, cognitive: 3.7, behavior: 4.1 },
-    targetMoods: ["burned-out", "exhausted", "overwhelmed"],
-    source: 'curated' as const
+    targetMoods: ["burned-out", "exhausted", "overwhelmed"]
   },
   {
     id: "b8",
@@ -118,8 +111,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["fiction", "meaning", "choices", "inspiration"],
     description: "A magical exploration of life's possibilities",
     emotionalProfile: { stress: 2.9, cognitive: 3.8, behavior: 2.6 },
-    targetMoods: ["confused", "hopeful", "lonely"],
-    source: 'curated' as const
+    targetMoods: ["confused", "hopeful", "lonely"]
   },
   {
     id: "b9",
@@ -129,8 +121,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["authenticity", "courage", "freedom", "truth"],
     description: "Stop pleasing, start living authentically",
     emotionalProfile: { stress: 3.1, cognitive: 4.2, behavior: 4.0 },
-    targetMoods: ["frustrated", "confused", "hopeful"],
-    source: 'curated' as const
+    targetMoods: ["frustrated", "confused", "hopeful"]
   },
   {
     id: "b10",
@@ -140,8 +131,7 @@ export const bookDataset: BookRecommendation[] = [
     tags: ["trauma", "healing", "neuroscience", "recovery"],
     description: "Understanding and healing trauma",
     emotionalProfile: { stress: 4.2, cognitive: 4.5, behavior: 3.8 },
-    targetMoods: ["overwhelmed", "anxious", "lonely"],
-    source: 'curated' as const
+    targetMoods: ["overwhelmed", "anxious", "lonely"]
   }
 ];
 
@@ -157,8 +147,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "8:08",
     emotionalProfile: { stress: 1.2, cognitive: 2.0, behavior: 1.8 },
     energyLevel: 1,
-    valence: 3,
-    source: 'curated' as const
+    valence: 3
   },
   {
     id: "m2",
@@ -170,8 +159,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "4:02",
     emotionalProfile: { stress: 2.1, cognitive: 2.8, behavior: 2.3 },
     energyLevel: 2,
-    valence: 4,
-    source: 'curated' as const
+    valence: 4
   },
   {
     id: "m3",
@@ -183,8 +171,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "5:36",
     emotionalProfile: { stress: 2.9, cognitive: 4.1, behavior: 2.6 },
     energyLevel: 2,
-    valence: 3,
-    source: 'curated' as const
+    valence: 3
   },
   {
     id: "m4",
@@ -196,8 +183,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "4:38",
     emotionalProfile: { stress: 1.5, cognitive: 2.2, behavior: 1.9 },
     energyLevel: 1,
-    valence: 4,
-    source: 'curated' as const
+    valence: 4
   },
   {
     id: "m5",
@@ -209,8 +195,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "4:31",
     emotionalProfile: { stress: 3.8, cognitive: 4.2, behavior: 3.1 },
     energyLevel: 3,
-    valence: 2,
-    source: 'curated' as const
+    valence: 2
   },
   {
     id: "m6",
@@ -222,8 +207,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:07",
     emotionalProfile: { stress: 4.1, cognitive: 3.9, behavior: 2.8 },
     energyLevel: 2,
-    valence: 1,
-    source: 'curated' as const
+    valence: 1
   },
   {
     id: "m7",
@@ -235,8 +219,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:05",
     emotionalProfile: { stress: 1.8, cognitive: 2.5, behavior: 2.9 },
     energyLevel: 3,
-    valence: 5,
-    source: 'curated' as const
+    valence: 5
   },
   {
     id: "m8",
@@ -248,8 +231,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:32",
     emotionalProfile: { stress: 1.3, cognitive: 2.1, behavior: 1.6 },
     energyLevel: 1,
-    valence: 3,
-    source: 'curated' as const
+    valence: 3
   },
   {
     id: "m9",
@@ -261,8 +243,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:28",
     emotionalProfile: { stress: 3.2, cognitive: 3.7, behavior: 2.4 },
     energyLevel: 2,
-    valence: 2,
-    source: 'curated' as const
+    valence: 2
   },
   {
     id: "m10",
@@ -274,8 +255,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:47",
     emotionalProfile: { stress: 2.3, cognitive: 3.1, behavior: 3.8 },
     energyLevel: 4,
-    valence: 4,
-    source: 'curated' as const
+    valence: 4
   },
   {
     id: "m11",
@@ -287,8 +267,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "4:12",
     emotionalProfile: { stress: 2.6, cognitive: 3.4, behavior: 2.2 },
     energyLevel: 2,
-    valence: 3,
-    source: 'curated' as const
+    valence: 3
   },
   {
     id: "m12",
@@ -300,8 +279,7 @@ export const musicDataset: MusicRecommendation[] = [
     duration: "3:58",
     emotionalProfile: { stress: 3.9, cognitive: 4.0, behavior: 2.7 },
     energyLevel: 2,
-    valence: 2,
-    source: 'curated' as const
+    valence: 2
   }
 ];
 

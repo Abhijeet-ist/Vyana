@@ -2,9 +2,10 @@
 
 import { signInWithPopup } from "firebase/auth";
 import { AnimatePresence, motion } from "framer-motion";
-import { Chrome, Github, LogOut, Settings, User } from "lucide-react";
+import { Chrome, Github, LogOut, Settings, User, Mail } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { auth, githubProvider, googleProvider } from "@/lib/firebase";
@@ -196,6 +197,42 @@ export function ProfileDialog() {
                   <Github className="w-5 h-5" strokeWidth={1.75} />
                   {loadingProvider === "github" ? "Connecting..." : "Continue with GitHub"}
                 </motion.button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-4 my-4">
+                  <div
+                    className="flex-1 h-px"
+                    style={{ backgroundColor: 'hsl(var(--seaweed) / 0.1)' }}
+                  />
+                  <span
+                    className="text-xs font-medium"
+                    style={{ color: 'hsl(var(--seaweed) / 0.35)' }}
+                  >
+                    or
+                  </span>
+                  <div
+                    className="flex-1 h-px"
+                    style={{ backgroundColor: 'hsl(var(--seaweed) / 0.1)' }}
+                  />
+                </div>
+
+                {/* Email/Password Login Link */}
+                <Link href="/auth" onClick={() => setProfileModalOpen(false)}>
+                  <motion.div
+                    whileHover="hover"
+                    whileTap="tap"
+                    variants={buttonHoverVariants}
+                    className="w-full p-4 rounded-2xl flex items-center gap-4 justify-center text-sm font-medium border-0 transition-all duration-300 cursor-pointer"
+                    style={{
+                      background: 'hsl(var(--sage-card) / 0.4)',
+                      border: '1px solid hsl(var(--sage) / 0.2)',
+                      color: 'hsl(var(--seaweed))'
+                    }}
+                  >
+                    <Mail className="w-5 h-5" strokeWidth={1.75} />
+                    Sign in with Email
+                  </motion.div>
+                </Link>
               </motion.div>
             </motion.div>
           ) : (

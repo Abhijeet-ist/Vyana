@@ -74,7 +74,7 @@ export interface BookRecommendation {
   isbn?: string;
   publishYear?: number;
   rating?: number;
-  source: 'ml_generated' | 'curated' | 'api';
+  source?: 'ml_generated' | 'curated' | 'api';
 }
 
 export interface MusicRecommendation {
@@ -99,7 +99,7 @@ export interface MusicRecommendation {
     speechiness: number;
     liveness: number;
   };
-  source: 'ml_generated' | 'curated' | 'api';
+  source?: 'ml_generated' | 'curated' | 'api';
 }
 
 export interface PersonalizedRecommendations {

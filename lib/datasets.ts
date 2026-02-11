@@ -12,6 +12,7 @@ export interface BookRecommendation {
     behavior: number;
   };
   targetMoods: string[];
+  source?: 'ml_generated' | 'curated' | 'api';
 }
 
 export interface MusicRecommendation {
@@ -29,6 +30,7 @@ export interface MusicRecommendation {
   };
   energyLevel: number; // 1-5
   valence: number; // 1-5 (positive/negative)
+  source?: 'ml_generated' | 'curated' | 'api';
 }
 
 // Curated book dataset based on mental health and emotional states

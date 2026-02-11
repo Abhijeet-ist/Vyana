@@ -32,7 +32,57 @@ interface SpotifySearchResponse {
 }
 
 export class SpotifyMusicService {
-  private accessToken = 'BQBOpi0akdePezT24hgqdJJ1ML9GPv0tMxT7O1B5K239m9IYwxk-720Vz17Vt8plivq2vmyGnbqv8SnKsPVD9h9lCrypHCm-ECe9vYlPDVww4L0sYFiHPLo6lYy_EQdHf4f3YKmAyQlaHMfvUuDqJLCk_jBD_5mzx6z-A0vyIKKVAousK7vusB1NUA2NSdLQAG68IzNLC2jDkLLVzT9VCe2btvuuA1xklmt9sV9wsbLp-xIJkL6z5WqeEYBbNrZdGRbzAXNeuFHWv9sku-Keu4SFV-n4lRgfrrY9GftsviJnIfxYGQUpAcK4JxEq_Obp42nO';
+  private accessToken: string | null = null;
+  private tokenExpiry: number = 0;
+
+  // Get access token - uses direct token if provided, otherwise Client Credentials flow
+  private async getAccessToken(): Promise<string | null> {
+    // First check for direct access token from environment
+    const directToken = process.env.NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN;
+    if (directToken) {
+      return directToken;
+    }
+
+    // Return cached token if still valid
+    if (this.accessToken && Date.now() < this.tokenExpiry) {
+      return this.accessToken;
+    }
+
+    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+    // If no credentials, return null to trigger fallback
+    if (!clientId || !clientSecret) {
+      console.warn('Spotify credentials not configured, using fallback music dataset');
+      return null;
+    }
+
+    try {
+      const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
+        },
+        body: 'grant_type=client_credentials'
+      });
+
+      if (!response.ok) {
+        console.error('Failed to get Spotify access token:', response.status);
+        return null;
+      }
+
+      const data = await response.json();
+      this.accessToken = data.access_token;
+      // Set expiry with 5 minute buffer
+      this.tokenExpiry = Date.now() + (data.expires_in - 300) * 1000;
+      
+      return this.accessToken;
+    } catch (error) {
+      console.error('Spotify token fetch failed:', error);
+      return null;
+    }
+  }
 
   // Generate search queries based on emotional state and profile
   generateMusicQuery(emotionalState: OnboardingSelection, profile: StressProfile): string {
@@ -64,13 +114,19 @@ export class SpotifyMusicService {
   // Search for tracks using Spotify API
   async searchTracks(query: string, limit = 10): Promise<SpotifyTrack[]> {
     try {
+      const token = await this.getAccessToken();
+      if (!token) {
+        console.warn('No Spotify token available');
+        return [];
+      }
+
       console.log(`Searching Spotify for: "${query}"`);
       
       const response = await fetch(
         `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=${limit}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.accessToken}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
@@ -92,11 +148,14 @@ export class SpotifyMusicService {
   // Get audio features for a single track
   async getAudioFeatures(trackId: string): Promise<SpotifyAudioFeatures | null> {
     try {
+      const token = await this.getAccessToken();
+      if (!token) return null;
+
       const response = await fetch(
         `https://api.spotify.com/v1/audio-features/${trackId}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.accessToken}`,
+            'Authorization': `Bearer ${token}`,
           },
         }
       );
@@ -288,11 +347,18 @@ export class SpotifyMusicService {
   // Test connection to Spotify API
   async testConnection(): Promise<boolean> {
     try {
-      const response = await fetch(`https://api.spotify.com/v1/me`, {
-        headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
-        },
-      });
+      const token = await this.getAccessToken();
+      if (!token) return false;
+
+      // Test with a simple search since /v1/me requires user auth
+      const response = await fetch(
+        `https://api.spotify.com/v1/search?q=test&type=track&limit=1`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
       
       return response.ok;
     } catch (error) {

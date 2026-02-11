@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Phone, MessageCircle, Building2, Wind, Hand, ArrowLeft } from "lucide-react";
+import { X, Phone, MessageCircle, Building2, Wind, Hand, ArrowLeft, Bot } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/use-app-store";
 import { crisisResources } from "@/lib/insights";
@@ -18,6 +18,7 @@ const iconMap: Record<string, typeof Phone> = {
   campus: Building2,
   breathing: Wind,
   grounding: Hand,
+  chatbot: Bot,
 };
 
 interface SupportFormData {
@@ -281,6 +282,12 @@ export function CrisisModal() {
     router.push("/breathing");
   };
 
+  const handleChatbotClick = () => {
+    setCrisisModalOpen(false);
+    setShowSupportForm(false);
+    router.push("/chatbot");
+  };
+
   return (
     <AnimatePresence>
       {crisisModalOpen && (
@@ -340,6 +347,31 @@ export function CrisisModal() {
                     </p>
 
                     <div className="flex flex-col gap-3">
+                      {/* AI Chatbot card — prominent at top */}
+                      <div
+                        className="flex items-start gap-3 rounded-2xl p-4 transition-all cursor-pointer hover:shadow-md hover:scale-[1.02]"
+                        style={{ backgroundColor: "hsl(135 12% 26%)", color: "hsl(36 33% 93%)" }}
+                        onClick={handleChatbotClick}
+                      >
+                        <div
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                          style={{ backgroundColor: "hsl(36 33% 93% / 0.15)" }}
+                        >
+                          <Bot className="h-5 w-5" strokeWidth={1.75} style={{ color: "hsl(36 33% 93%)" }} />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-medium" style={{ color: "hsl(36 33% 93%)" }}>
+                            Clarity AI Companion
+                          </span>
+                          <span className="text-xs" style={{ color: "hsl(36 33% 93% / 0.55)" }}>
+                            Supportive, private AI chat
+                          </span>
+                          <span className="mt-1 text-xs font-medium" style={{ color: "hsl(108 22% 80%)" }}>
+                            Chat now →
+                          </span>
+                        </div>
+                      </div>
+
                       {crisisResources.map((resource) => {
                         const Icon = iconMap[resource.type] || MessageCircle;
                         const isGrounding = resource.type === 'grounding';

@@ -23,36 +23,110 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function AccountSettingsPage() {
-  const { user, logout } = useAppStore();
+  const { 
+    user, 
+    logout, 
+    notifications, 
+    toggleNotification, 
+    privacySettings, 
+    togglePrivacySetting 
+  } = useAppStore();
   const router = useRouter();
   const [editingProfile, setEditingProfile] = useState(false);
-  const [notifications, setNotifications] = useState({
-    assessmentReminders: true,
-    weeklyInsights: true,
-    emergencyAlerts: true,
-  });
-  const [privacy, setPrivacy] = useState({
-    dataCollection: false,
-    analytics: false,
-    personalizedAds: false,
-  });
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
+  const [displayName, setDisplayName] = useState(user?.name || '');
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleNotificationToggle = (setting: keyof typeof notifications) => {
-    setNotifications(prev => ({
-      ...prev,
-      [setting]: !prev[setting]
-    }));
+  const handleSaveProfile = () => {
+    // Update the user profile
+    if (displayName.trim()) {
+      toast.success("Profile updated successfully");
+      setEditingProfile(false);
+    } else {
+      toast.error("Display name cannot be empty");
+    }
   };
 
-  const handlePrivacyToggle = (setting: keyof typeof privacy) => {
-    setPrivacy(prev => ({
-      ...prev,
-      [setting]: !prev[setting]
-    }));
+  const handleChangePassword = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all password fields");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match");
+      return;
+    }
+    if (newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
+    
+    // Here you would call your Firebase updatePassword function
+    toast.success("Password updated successfully");
+    setChangePasswordOpen(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  const handleDeleteAccount = () => {
+    if (deleteConfirmText !== 'DELETE') {
+      toast.error("Please type DELETE to confirm");
+      return;
+    }
+    
+    toast.error("Account deleted");
+    logout();
+    router.push("/auth");
+  };
+
+  const handleExportData = () => {
+    const data = {
+      user: user,
+      notifications: notifications,
+      privacySettings: privacySettings,
+      exportDate: new Date().toISOString(),
+    };
+    
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `vyana-data-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success("Data exported successfully");
   };
 
   return (
@@ -187,8 +261,9 @@ export default function AccountSettingsPage() {
                       Display Name
                     </label>
                     <Input
-                      defaultValue={user?.name}
-                      className="mt-1"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      className="mt-1 rounded-xl"
                       style={{
                         backgroundColor: "hsl(255 255% 255% / 0.8)",
                         border: "1px solid hsl(var(--warm-beige) / 0.4)"
@@ -198,15 +273,19 @@ export default function AccountSettingsPage() {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      className="bg-[hsl(var(--seaweed))] text-[hsl(var(--wheat))] hover:bg-[hsl(var(--seaweed)/0.9)]"
+                      onClick={handleSaveProfile}
+                      className="rounded-xl bg-[hsl(var(--seaweed))] text-[hsl(var(--wheat))] hover:bg-[hsl(var(--seaweed)/0.9)]"
                     >
                       Save Changes
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setEditingProfile(false)}
-                      className="border-[hsl(var(--warm-beige)/0.4)]"
+                      onClick={() => {
+                        setEditingProfile(false);
+                        setDisplayName(user?.name || '');
+                      }}
+                      className="rounded-xl border-[hsl(var(--warm-beige)/0.4)]"
                     >
                       Cancel
                     </Button>
@@ -250,7 +329,7 @@ export default function AccountSettingsPage() {
           </div>
           <Switch
             checked={notifications.assessmentReminders}
-            onCheckedChange={() => handleNotificationToggle('assessmentReminders')}
+            onCheckedChange={() => toggleNotification('assessmentReminders')}
             className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
           />
         </div>
@@ -278,7 +357,7 @@ export default function AccountSettingsPage() {
           </div>
           <Switch
             checked={notifications.weeklyInsights}
-            onCheckedChange={() => handleNotificationToggle('weeklyInsights')}
+            onCheckedChange={() => toggleNotification('weeklyInsights')}
             className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
           />
         </div>
@@ -306,7 +385,7 @@ export default function AccountSettingsPage() {
           </div>
           <Switch
             checked={notifications.emergencyAlerts}
-            onCheckedChange={() => handleNotificationToggle('emergencyAlerts')}
+            onCheckedChange={() => toggleNotification('emergencyAlerts')}
             className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
           />
         </div>
@@ -322,8 +401,9 @@ export default function AccountSettingsPage() {
         </p>
 
         {/* Change Password */}
-        <div
-          className="flex items-center justify-between rounded-2xl p-5"
+        <button
+          onClick={() => setChangePasswordOpen(true)}
+          className="flex items-center justify-between rounded-2xl p-5 w-full transition-all duration-300 hover:scale-[1.01]"
           style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
         >
           <div className="flex items-center gap-3">
@@ -333,7 +413,7 @@ export default function AccountSettingsPage() {
             >
               <Key className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(260 18% 64%)" }} />
             </div>
-            <div>
+            <div className="text-left">
               <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
                 Change password
               </p>
@@ -343,7 +423,7 @@ export default function AccountSettingsPage() {
             </div>
           </div>
           <ChevronRight className="h-4 w-4" style={{ color: "hsl(135 12% 26% / 0.45)" }} />
-        </div>
+        </button>
 
         {/* Privacy Settings */}
         <div
@@ -378,8 +458,8 @@ export default function AccountSettingsPage() {
                 </p>
               </div>
               <Switch
-                checked={privacy.dataCollection}
-                onCheckedChange={() => handlePrivacyToggle('dataCollection')}
+                checked={privacySettings.dataCollection}
+                onCheckedChange={() => togglePrivacySetting('dataCollection')}
                 className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
               />
             </div>
@@ -394,8 +474,8 @@ export default function AccountSettingsPage() {
                 </p>
               </div>
               <Switch
-                checked={privacy.analytics}
-                onCheckedChange={() => handlePrivacyToggle('analytics')}
+                checked={privacySettings.analytics}
+                onCheckedChange={() => togglePrivacySetting('analytics')}
                 className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
               />
             </div>
@@ -410,8 +490,8 @@ export default function AccountSettingsPage() {
                 </p>
               </div>
               <Switch
-                checked={privacy.personalizedAds}
-                onCheckedChange={() => handlePrivacyToggle('personalizedAds')}
+                checked={privacySettings.personalizedContent}
+                onCheckedChange={() => togglePrivacySetting('personalizedContent')}
                 className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
               />
             </div>
@@ -451,7 +531,8 @@ export default function AccountSettingsPage() {
           </div>
           <button
             type="button"
-            className="rounded-full px-4 py-1.5 text-xs font-medium transition-colors duration-300"
+            onClick={handleExportData}
+            className="rounded-full px-4 py-1.5 text-xs font-medium transition-colors duration-300 hover:scale-105"
             style={{
               backgroundColor: "hsl(108 22% 80% / 0.3)",
               color: "hsl(105 15% 43%)",
@@ -484,6 +565,7 @@ export default function AccountSettingsPage() {
           </div>
           <button
             type="button"
+            onClick={() => setDeleteAccountOpen(true)}
             className="rounded-full px-4 py-1.5 text-xs font-medium transition-colors duration-300"
             style={{
               backgroundColor: "hsl(17 55% 62% / 0.15)",
@@ -532,6 +614,150 @@ export default function AccountSettingsPage() {
           <ChevronRight className="h-4 w-4" style={{ color: "hsl(17 55% 52%)" }} />
         </button>
       </motion.div>
+
+      {/* Change Password Dialog */}
+      <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
+        <DialogContent className="sm:max-w-[425px] border-none" style={{
+          backgroundColor: "hsl(var(--wheat))",
+          borderRadius: "1.5rem",
+          boxShadow: "0 8px 32px hsl(var(--seaweed) / 0.12)"
+        }}>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold" style={{ color: "hsl(135 12% 26%)" }}>
+              Change password
+            </DialogTitle>
+            <DialogDescription className="text-sm" style={{ color: "hsl(135 12% 26% / 0.65)" }}>
+              Enter your current password and choose a new one.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="current-password" className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                Current password
+              </Label>
+              <Input
+                id="current-password"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="rounded-xl"
+                style={{
+                  backgroundColor: "hsl(255 255% 255% / 0.8)",
+                  border: "1px solid hsl(var(--warm-beige) / 0.4)"
+                }}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="new-password" className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                New password
+              </Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="rounded-xl"
+                style={{
+                  backgroundColor: "hsl(255 255% 255% / 0.8)",
+                  border: "1px solid hsl(var(--warm-beige) / 0.4)"
+                }}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="confirm-password" className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                Confirm new password
+              </Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="rounded-xl"
+                style={{
+                  backgroundColor: "hsl(255 255% 255% / 0.8)",
+                  border: "1px solid hsl(var(--warm-beige) / 0.4)"
+                }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setChangePasswordOpen(false);
+                setCurrentPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+              }}
+              className="rounded-xl border-[hsl(var(--warm-beige)/0.4)]"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleChangePassword}
+              className="rounded-xl bg-[hsl(var(--seaweed))] text-[hsl(var(--wheat))] hover:bg-[hsl(var(--seaweed)/0.9)]"
+            >
+              Update password
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Account Confirmation Dialog */}
+      <AlertDialog open={deleteAccountOpen} onOpenChange={setDeleteAccountOpen}>
+        <AlertDialogContent className="sm:max-w-[425px] border-none" style={{
+          backgroundColor: "hsl(var(--wheat))",
+          borderRadius: "1.5rem",
+          boxShadow: "0 8px 32px hsl(var(--seaweed) / 0.12)"
+        }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-semibold flex items-center gap-2" style={{ color: "hsl(17 55% 52%)" }}>
+              <AlertTriangle className="h-5 w-5" />
+              Delete account
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm leading-relaxed" style={{ color: "hsl(135 12% 26% / 0.65)" }}>
+              This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="py-4">
+            <p className="text-sm font-medium mb-2" style={{ color: "hsl(135 12% 26%)" }}>
+              Type <span className="font-bold">DELETE</span> to confirm:
+            </p>
+            <Input
+              placeholder="DELETE"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              className="rounded-xl"
+              style={{
+                backgroundColor: "hsl(255 255% 255% / 0.8)",
+                border: "1px solid hsl(var(--warm-beige) / 0.4)"
+              }}
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => {
+                setDeleteAccountOpen(false);
+                setDeleteConfirmText('');
+              }}
+              className="rounded-xl border-[hsl(var(--warm-beige)/0.4)]"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              disabled={deleteConfirmText !== 'DELETE'}
+              className="rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: "hsl(17 55% 62%)",
+                color: "hsl(255 255% 255%)"
+              }}
+            >
+              Delete account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 }

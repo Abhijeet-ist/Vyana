@@ -306,7 +306,7 @@ export function CrisisModal() {
           />
 
           <motion.div
-            className="fixed z-[70] rounded-3xl shadow-2xl w-[calc(100%-2rem)] max-w-md left-1/2 top-[8%] -translate-x-1/2"
+            className="fixed inset-x-4 top-[8%] z-[70] mx-auto max-w-md rounded-3xl shadow-2xl sm:inset-x-auto"
             style={{ backgroundColor: "hsl(0 0% 100%)", color: "hsl(135 12% 26%)", minHeight: "400px" }}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

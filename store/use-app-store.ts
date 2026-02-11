@@ -53,6 +53,22 @@ interface AppState {
   setUser: (user: User | null) => void;
   setProfileModalOpen: (open: boolean) => void;
   logout: () => void;
+
+  /* Notifications */
+  notifications: {
+    assessmentReminders: boolean;
+    weeklyInsights: boolean;
+    emergencyAlerts: boolean;
+  };
+  toggleNotification: (setting: keyof AppState['notifications']) => void;
+
+  /* Privacy Settings */
+  privacySettings: {
+    dataCollection: boolean;
+    analytics: boolean;
+    personalizedContent: boolean;
+  };
+  togglePrivacySetting: (setting: keyof AppState['privacySettings']) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -120,4 +136,30 @@ export const useAppStore = create<AppState>((set) => ({
   setUser: (user) => set({ user, isAuthenticated: !!user }),
   setProfileModalOpen: (profileModalOpen) => set({ profileModalOpen }),
   logout: () => set({ user: null, isAuthenticated: false, profileModalOpen: false }),
+
+  notifications: {
+    assessmentReminders: true,
+    weeklyInsights: true,
+    emergencyAlerts: true,
+  },
+  toggleNotification: (setting) =>
+    set((state) => ({
+      notifications: {
+        ...state.notifications,
+        [setting]: !state.notifications[setting],
+      },
+    })),
+
+  privacySettings: {
+    dataCollection: false,
+    analytics: false,
+    personalizedContent: false,
+  },
+  togglePrivacySetting: (setting) =>
+    set((state) => ({
+      privacySettings: {
+        ...state.privacySettings,
+        [setting]: !state.privacySettings[setting],
+      },
+    })),
 }));

@@ -20,23 +20,24 @@ db = FAISS.load_local(
     INDEX_DIR.as_posix(), embeddings, allow_dangerous_deserialization=True
 )
 
-# Local LLM (will auto-download if not present - ~1.8GB)
-llm = GPT4All(model="orca-mini-3b-gguf2-q4_0.gguf", allow_download=True, verbose=False)
+# Local LLM optimized for faster responses
+llm = GPT4All(
+    model="orca-mini-3b-gguf2-q4_0.gguf",
+    allow_download=True,
+    verbose=False,
+    n_threads=4,
+    max_tokens=150,
+    temp=0.7,
+)
 
-# Prompt (NATIONAL LEVEL SAFE)
+# Prompt (concise for faster responses)
 prompt = ChatPromptTemplate.from_template(
     """
-You are a mental health support assistant.
-You ONLY provide information from official sources.
-You do NOT give medical diagnosis or treatment advice.
+Context: {context}
 
-Context:
-{context}
+Question: {input}
 
-Question:
-{input}
-
-Answer in a calm and supportive tone.
+Provide a brief, supportive response (2-3 sentences) based on the context.
 """
 )
 
@@ -45,9 +46,9 @@ document_chain = create_stuff_documents_chain(
     llm, prompt, output_parser=StrOutputParser()
 )
 
-# Retrieval chain (RAG)
+# Retrieval chain (RAG) - reduced k for faster response
 retrieval_chain = create_retrieval_chain(
-    db.as_retriever(search_kwargs={"k": 3}), document_chain
+    db.as_retriever(search_kwargs={"k": 2}), document_chain
 )
 
 print("🧠 NATIONAL MENTAL HEALTH RAG BOT READY")

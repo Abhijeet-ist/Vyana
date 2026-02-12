@@ -47,6 +47,7 @@
     "embla-carousel-react": "8.5.1",
     "firebase": "^12.9.0",
     "framer-motion": "^11.18.0",
+    "groq-sdk": "^0.37.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.544.0",
     "mongodb": "^7.1.0",

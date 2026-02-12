@@ -1,16 +1,26 @@
+import os
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms import GPT4All
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
 from pydantic import BaseModel
 
 app = FastAPI(title="National Mental Health RAG API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class Question(BaseModel):
@@ -28,19 +38,19 @@ db = FAISS.load_local(
     INDEX_DIR.as_posix(), embeddings, allow_dangerous_deserialization=True
 )
 
-# Local LLM optimized for faster responses
-llm = GPT4All(
-    model="orca-mini-3b-gguf2-q4_0.gguf",
-    allow_download=True,
-    verbose=False,
-    n_threads=4,
-    max_tokens=150,
-    temp=0.7,
+# Groq API - fast cloud LLM (no local model needed)
+llm = ChatGroq(
+    model="llama-3.1-8b-instant",
+    api_key=os.environ.get("GROQ_API_KEY"),
+    temperature=0.7,
+    max_tokens=200,
 )
 
 # Prompt (concise for faster responses)
 prompt = ChatPromptTemplate.from_template(
     """
+You are a compassionate mental health support assistant.
+
 Context: {context}
 
 Question: {input}

@@ -138,7 +138,11 @@ export const useAppStore = create<AppState>()(
       profileModalOpen: false,
       setUser: (user) => set({ user, isAuthenticated: !!user }),
       setProfileModalOpen: (profileModalOpen) => set({ profileModalOpen }),
-      logout: () => set({ user: null, isAuthenticated: false, profileModalOpen: false }),
+      logout: () => {
+        // Clear persisted storage
+        localStorage.removeItem('vyana-storage');
+        set({ user: null, isAuthenticated: false, profileModalOpen: false });
+      },
 
       notifications: {
         assessmentReminders: true,

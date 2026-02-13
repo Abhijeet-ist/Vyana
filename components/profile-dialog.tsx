@@ -1,6 +1,6 @@
 "use client";
 
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signOut } from "firebase/auth";
 import { AnimatePresence, motion } from "framer-motion";
 import { Chrome, Github, LogOut, Settings, User, Mail } from "lucide-react";
 import { useState } from "react";
@@ -101,9 +101,18 @@ export function ProfileDialog() {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    setProfileModalOpen(false);
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      logout();
+      setProfileModalOpen(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      logout();
+      setProfileModalOpen(false);
+      router.push('/');
+    }
   };
 
   const handleAccountSettings = () => {

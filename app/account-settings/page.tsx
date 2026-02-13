@@ -46,8 +46,9 @@ import { Label } from "@/components/ui/label";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { storage } from "@/lib/firebase";
+import { storage, auth } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { signOut } from "firebase/auth";
 
 export default function AccountSettingsPage() {
   const { 
@@ -57,7 +58,11 @@ export default function AccountSettingsPage() {
     toggleNotification, 
     privacySettings, 
     togglePrivacySetting,
-    setUser
+    setUser,
+    reducedMotion,
+    toggleReducedMotion,
+    highContrast,
+    toggleHighContrast
   } = useAppStore();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -152,6 +157,28 @@ export default function AccountSettingsPage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      logout();
+      router.push('/');
+    }
+  };
+
+  const handleToggleReducedMotion = () => {
+    toggleReducedMotion();
+    toast.success(reducedMotion ? "Animations enabled" : "Animations reduced");
+  };
+
+  const handleToggleHighContrast = () => {
+    toggleHighContrast();
+    toast.success(highContrast ? "High contrast disabled" : "High contrast enabled");
+  };
+
   const handleChangePassword = () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       toast.error("Please fill in all password fields");
@@ -182,7 +209,7 @@ export default function AccountSettingsPage() {
     
     toast.error("Account deleted");
     logout();
-    router.push("/auth");
+    router.push("/");
   };
 
   const handleExportData = () => {
@@ -208,13 +235,13 @@ export default function AccountSettingsPage() {
 
   return (
     <motion.div
-      variants={staggerContainer}
-      initial="hidden"
-      animate="visible"
+      variants={reducedMotion ? {} : staggerContainer}
+      initial={reducedMotion ? {} : "hidden"}
+      animate={reducedMotion ? {} : "visible"}
       className="flex flex-col gap-6 pb-20"
     >
       {/* Header */}
-      <motion.div variants={fadeInUp} className="pt-2">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="pt-2">
         <div className="flex items-center gap-3 mb-2">
           <button
             onClick={() => router.back()}
@@ -242,7 +269,7 @@ export default function AccountSettingsPage() {
       </motion.div>
 
       {/* Profile Section */}
-      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
         <p
           className="text-xs font-semibold uppercase tracking-wide"
           style={{ color: "hsl(135 12% 26% / 0.35)" }}
@@ -355,9 +382,9 @@ export default function AccountSettingsPage() {
 
               {editingProfile && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={reducedMotion ? {} : { opacity: 0, height: 0 }}
+                  animate={reducedMotion ? {} : { opacity: 1, height: "auto" }}
+                  exit={reducedMotion ? {} : { opacity: 0, height: 0 }}
                   className="mt-4 space-y-3"
                 >
                   <div>
@@ -402,7 +429,7 @@ export default function AccountSettingsPage() {
       </motion.div>
 
       {/* Notifications Section */}
-      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
         <p
           className="text-xs font-semibold uppercase tracking-wide"
           style={{ color: "hsl(135 12% 26% / 0.35)" }}
@@ -495,8 +522,74 @@ export default function AccountSettingsPage() {
         </div>
       </motion.div>
 
+      {/* Accessibility Section */}
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
+        <p
+          className="text-xs font-semibold uppercase tracking-wide"
+          style={{ color: "hsl(135 12% 26% / 0.35)" }}
+        >
+          Accessibility
+        </p>
+
+        {/* Reduce Motion */}
+        <div
+          className="flex items-center justify-between rounded-2xl p-5"
+          style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ backgroundColor: "hsl(260 18% 84% / 0.35)" }}
+            >
+              <Palette className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(260 18% 64%)" }} />
+            </div>
+            <div>
+              <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                Reduce motion
+              </p>
+              <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
+                Minimize animations and transitions
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={reducedMotion}
+            onCheckedChange={handleToggleReducedMotion}
+            className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
+          />
+        </div>
+
+        {/* High Contrast */}
+        <div
+          className="flex items-center justify-between rounded-2xl p-5"
+          style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ backgroundColor: "hsl(108 22% 80% / 0.4)" }}
+            >
+              <Palette className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(105 15% 43%)" }} />
+            </div>
+            <div>
+              <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                High contrast
+              </p>
+              <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
+                Increase color contrast for better visibility
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={highContrast}
+            onCheckedChange={handleToggleHighContrast}
+            className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
+          />
+        </div>
+      </motion.div>
+
       {/* Privacy & Security Section */}
-      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
         <p
           className="text-xs font-semibold uppercase tracking-wide"
           style={{ color: "hsl(135 12% 26% / 0.35)" }}
@@ -604,7 +697,7 @@ export default function AccountSettingsPage() {
       </motion.div>
 
       {/* Data Management Section */}
-      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
         <p
           className="text-xs font-semibold uppercase tracking-wide"
           style={{ color: "hsl(135 12% 26% / 0.35)" }}
@@ -682,7 +775,7 @@ export default function AccountSettingsPage() {
       </motion.div>
 
       {/* Account Actions */}
-      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+      <motion.div variants={reducedMotion ? {} : fadeInUp} className="flex flex-col gap-3">
         <p
           className="text-xs font-semibold uppercase tracking-wide"
           style={{ color: "hsl(135 12% 26% / 0.35)" }}
@@ -692,7 +785,7 @@ export default function AccountSettingsPage() {
 
         {/* Sign Out */}
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="flex items-center justify-between rounded-2xl p-5 w-full transition-all duration-300 hover:scale-[1.02]"
           style={{ 
             backgroundColor: "hsl(0 0% 100% / 0.7)",
@@ -711,7 +804,7 @@ export default function AccountSettingsPage() {
                 Sign out of account
               </p>
               <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
-                You'll be redirected to the login page
+                You'll be redirected to the home page
               </p>
             </div>
           </div>

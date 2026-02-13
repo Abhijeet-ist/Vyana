@@ -1,108 +1,131 @@
-# 🌿 Vyana: Intelligent Mental Wellness
+# 🌿 Vyana: Intelligent Mental Wellness Ecosystem
 
-Vyana is a data-driven, empathetic mental wellness platform designed to provide a personalized, calming experience. Unlike generic wellness apps, Vyana adapts its assessments and recommendations based on your real-time emotional state, providing a unique "Clarity" journey for every user.
+Vyana is an advanced, data-driven mental wellness platform designed to provide a deeply personalized and empathetic user experience. By integrating real-time emotional tracking, AI-powered recommendations, and a Retrieval-Augmented Generation (RAG) chatbot, Vyana transforms the mental health journey into a proactive, "Clarity"-focused path.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-3.4-38B2AC?style=flat-square&logo=tailwind-css)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.1-FF69B4?style=flat-square&logo=framer-motion)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi)
 
 ---
 
-## ✨ Key Features
+## 🚀 Core Features
 
-### 1. **Adaptive Emotional Check-in**
-Start your journey by selecting your current emotional state (e.g., *Overwhelmed, Burned Out, Hopeful, Lonely*). The entire application's logic pivots based on this selection to provide relevant support.
+### 1. Adaptive Emotional Intelligence
+The platform begins with a sophisticated emotional check-in. Users select their current state—ranging from *Overwhelmed* to *Hopeful*—which instantly recalibrates the entire application's logic, UI themes, and support suggestions.
 
-### 2. **Personalized Mental Health Assessments**
-Dynamic questionnaires that change based on your mood. We use these inputs to calculate a multi-dimensional **Stress Profile** covering:
-- **Cognitive State**
-- **Stress Levels**
-- **Behavioral Patterns**
-- **Overall Wellbeing**
+### 2. AI-Powered Chatbot (RAG System)
+Vyana features a specialized mental health chatbot built on a **Retrieval-Augmented Generation (RAG)** architecture.
+- **Contextual Awareness:** Uses specialized datasets to provide evidence-based support.
+- **Hybrid Backend:** Leverages **Groq SDK** for ultra-fast LLM responses and **LangChain** for complex orchestration.
+- **Knowledge Base:** Vectorized clinical and wellness data stored in **FAISS** for precise retrieval.
 
-### 3. **AI-Powered Recommendation Engine**
-A sophisticated backend matching engine that utilizes **Cosine Similarity** and **Euclidean Distance** to suggest:
-- **📚 Curated Books:** Hand-picked literature that matches your emotional needs.
-- **🎵 Dynamic Spotify Playlists:** Real-time music recommendations fetched via the Spotify API, filtered by energy, valence, and acousticness.
+### 3. Smart Recommendation Engine
+A multi-dimensional matching engine that utilizes vector similarity to suggest therapeutic content:
+- **🎵 Dynamic Spotify Integration:** Real-time playlist generation based on energy, valence, and acousticness profiles.
+- **📚 Curated Literature:** Book recommendations mapped to the user's specific cognitive and stress markers.
+- **⚖️ Advanced Scoring:** Utilizes **Cosine Similarity** and **Weighted Euclidean Distance** with a 35-40% weight on profile matching.
+- **📉 Confidence & Diversity:** Features a confidence scoring system based on assessment consistency and diversity injection to prevent content fatigue.
 
-### 4. **Immersive Visualization**
-Watch your mental state come to life through a generative "Bubble Visualization" that represents your emotional steadiness score and profile dimensions in a fluid, organic way.
+> For a deep dive into the mathematical models and datasets, see [ML_RECOMMENDATIONS.md](./ML_RECOMMENDATIONS.md).
 
-### 5. **Breathing & Mindfulness**
-A dedicated breathing intro and crisis intervention modal (`Crisis FAB`) provide immediate grounding techniques when things get tough.
+### 4. Emotional Visualization
+Interactive "Bubble Visualizations" translate abstract mental states into tangible, organic shapes. This allows users to track their **Emotional Steadiness Score** and observe shifts in their stress profiles over time.
+
+### 5. Crisis & Grounding Tools
+Immediate intervention modules including a `Crisis FAB` and guided breathing exercises designed to provide instant relief during high-stress moments.
+
+---
+
+## 📂 Project Structure
+
+```text
+Vyana/
+├── app/                  # Next.js App Router (Frontend & API routes)
+│   ├── api/              # Backend endpoints (Chat, Auth, Reflections)
+│   ├── assessment/       # Dynamic wellness questionnaires
+│   ├── chatbot/          # AI Chat interface
+│   └── ...               # Functional modules (Mood, Settings, Resources)
+├── components/           # Reusable UI components (Shadcn/UI + Custom)
+│   ├── ui/               # Atomic UI elements
+│   └── ...               # Layout & Feature components
+├── lib/                  # Core logic and services
+│   ├── rag/              # Python-based RAG service (FastAPI, LangChain)
+│   ├── ml-recommendations.ts # Similarity matching logic
+│   └── spotify-service.ts    # Spotify Web API integration
+├── store/                # State management (Zustand)
+├── public/               # Static assets and placeholders
+└── styles/               # Global styling and Tailwind configurations
+```
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Framework:** [Next.js 15+](https://nextjs.org/) (App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) + [Shadcn/UI](https://ui.shadcn.com/)
-- **Animations:** [Framer Motion](https://www.framer.com/motion/)
-- **State Management:** [Zustand](https://docs.pmnd.rs/zustand/)
-- **Forms & Validation:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
-- **Visualization:** [Recharts](https://recharts.org/)
-- **API Integration:** [Spotify Web API](https://developer.spotify.com/documentation/web-api)
+### Frontend & Orchestration
+- **Framework:** Next.js 15 (App Router)
+- **State:** Zustand
+- **Animations:** Framer Motion (Organic transitions)
+- **Styling:** Tailwind CSS + Shadcn/UI
+- **Forms:** React Hook Form + Zod
+
+### Artificial Intelligence & ML
+- **LLM Engine:** Groq (Llama-3 models)
+- **Framework:** LangChain & FastAPI
+- **Vector DB:** FAISS
+- **Embeddings:** Sentence-Transformers (HuggingFace)
+- **Logic:** Weighted Similarity (Cosine & Euclidean)
+
+### Data & Backend
+- **Database:** MongoDB (User data & reflections)
+- **Auth:** Firebase Authentication
+- **External APIs:** Spotify Web API
 
 ---
 
-## 🚀 Getting Started
+## 🛠 Installation & Setup
 
-### Prerequisites
-- Node.js 18.x or later
-- npm / pnpm / yarn
+### 1. Prerequisites
+- Node.js 18.x+
+- Python 3.10+
+- MongoDB instance
+- Spotify Developer Account
 
-### Installation
+### 2. Frontend Setup
+```bash
+git clone https://github.com/Abhijeet-ist/Vyana.git
+cd Vyana
+npm install
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Abhijeet-ist/Vyana.git
-   cd Vyana
-   ```
+### 3. RAG Service Setup (Python)
+```bash
+cd lib/rag
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python api.py  # Starts the FastAPI server
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Environment Variables:**
-   Create a `.env.local` file in the root directory and add your Spotify credentials:
-   ```env
-   NEXT_PUBLIC_SPOTIFY_CLIENT_ID=your_client_id
-   NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=your_client_secret
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) to see the result.
-
----
-
-## 🧠 The ML Recommendation Logic
-
-Vyana uses a custom **Weighted Similarity Engine** to ensure recommendations are scientifically relevant to your state:
-
-- **Vector Mapping:** We map books and songs to a 3D coordinate system (Stress, Cognitive, Behavior).
-- **Weighted Adjustments:** If a user is "Burned Out," the engine gives a 2x weight to "Stress Reduction" items.
-- **Diversity Filtering:** Ensures that the top 3 recommendations are distinct in genre and mood to prevent content fatigue.
+### 4. Environment Variables
+Create a `.env.local` in the root and add:
+```env
+NEXT_PUBLIC_SPOTIFY_CLIENT_ID=...
+NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=...
+MONGODB_URI=...
+GROQ_API_KEY=...
+FIREBASE_CONFIG=...
+```
 
 ---
 
 ## 🎨 Design Philosophy
 
-- **Serenity:** Use of sage greens, warm wheats, and soft lavenders to reduce ocular strain and promote calm.
-- **Glassmorphism:** Translucent surfaces and blur effects create a sense of depth and focus.
-- **Organic Motion:** Slow-timed transitions (400ms-700ms) mirror natural human breathing patterns.
+Vyana follows a **Biophilic Design** approach:
+- **Color Palette:** Sage greens, warm wheats, and soft lavenders to minimize cognitive load.
+- **Glassmorphism:** Using depth and blur to maintain focus on primary actions.
+- **Human-Centric Motion:** Animations are timed (400ms-700ms) to mirror natural human respiratory rhythms.
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-*Vyana was built with ❤️ for anyone navigating the complexities of the human mind.*
+*Vyana: Harmonizing technology and empathy for a clearer mind.*

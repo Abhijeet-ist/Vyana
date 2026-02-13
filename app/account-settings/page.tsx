@@ -18,7 +18,8 @@ import {
   Lock,
   Key,
   AlertTriangle,
-  ArrowLeft
+  ArrowLeft,
+  Loader2
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
@@ -42,9 +43,11 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function AccountSettingsPage() {
   const { 
@@ -53,9 +56,11 @@ export default function AccountSettingsPage() {
     notifications, 
     toggleNotification, 
     privacySettings, 
-    togglePrivacySetting 
+    togglePrivacySetting,
+    setUser
   } = useAppStore();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
@@ -64,6 +69,78 @@ export default function AccountSettingsPage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size should be less than 5MB");
+      return;
+    }
+
+    setUploadingAvatar(true);
+
+    try {
+      // Try Firebase Storage first
+      try {
+        const timestamp = Date.now();
+        const filename = `avatars/${user?.id || 'anonymous'}_${timestamp}.${file.name.split('.').pop()}`;
+        
+        const storageRef = ref(storage, filename);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        if (user) {
+          setUser({
+            ...user,
+            avatar: downloadURL
+          });
+          toast.success("Profile picture updated successfully");
+        }
+      } catch (storageError) {
+        console.warn("Firebase Storage not available, using base64:", storageError);
+        
+        // Fallback to base64 encoding (works without backend)
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result as string;
+          if (user) {
+            setUser({
+              ...user,
+              avatar: base64String
+            });
+            toast.success("Profile picture updated successfully");
+          }
+        };
+        reader.onerror = () => {
+          toast.error("Failed to read image file");
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Failed to upload profile picture. Please try again.");
+    } finally {
+      setUploadingAvatar(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   const handleSaveProfile = () => {
     // Update the user profile
@@ -194,32 +271,59 @@ export default function AccountSettingsPage() {
           <div className="flex items-start gap-4">
             {/* Avatar */}
             <div className="relative">
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-medium"
-                style={{
-                  background: `
-                    linear-gradient(135deg,
-                      hsl(var(--seaweed)) 0%,
-                      hsl(var(--sage)) 100%
-                    )
-                  `,
-                  color: 'hsl(var(--wheat))',
-                  boxShadow: `
-                    0 8px 16px hsl(var(--seaweed) / 0.2),
-                    inset 0 2px 8px hsl(var(--seaweed) / 0.2)
-                  `
-                }}
-              >
-                {user?.name?.charAt(0).toUpperCase() || 'U'}
-              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                className="hidden"
+              />
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-16 h-16 rounded-full object-cover"
+                  style={{
+                    boxShadow: `
+                      0 8px 16px hsl(var(--seaweed) / 0.2),
+                      inset 0 2px 8px hsl(var(--seaweed) / 0.2)
+                    `
+                  }}
+                />
+              ) : (
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-medium"
+                  style={{
+                    background: `
+                      linear-gradient(135deg,
+                        hsl(var(--seaweed)) 0%,
+                        hsl(var(--sage)) 100%
+                      )
+                    `,
+                    color: 'hsl(var(--wheat))',
+                    boxShadow: `
+                      0 8px 16px hsl(var(--seaweed) / 0.2),
+                      inset 0 2px 8px hsl(var(--seaweed) / 0.2)
+                    `
+                  }}
+                >
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                </div>
+              )}
               <button
-                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center"
+                onClick={handleAvatarClick}
+                disabled={uploadingAvatar}
+                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   backgroundColor: "hsl(var(--wheat))",
                   boxShadow: "0 2px 8px hsl(var(--seaweed) / 0.2)"
                 }}
               >
-                <Camera className="w-3 h-3" style={{ color: "hsl(var(--seaweed))" }} />
+                {uploadingAvatar ? (
+                  <Loader2 className="w-3 h-3 animate-spin" style={{ color: "hsl(var(--seaweed))" }} />
+                ) : (
+                  <Camera className="w-3 h-3" style={{ color: "hsl(var(--seaweed))" }} />
+                )}
               </button>
             </div>
 

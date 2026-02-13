@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type {
   EmotionalState,
   OnboardingSelection,
@@ -71,95 +72,111 @@ interface AppState {
   togglePrivacySetting: (setting: keyof AppState['privacySettings']) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  emotionalState: "neutral",
-  setEmotionalState: (emotionalState) => set({ emotionalState }),
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      emotionalState: "neutral",
+      setEmotionalState: (emotionalState) => set({ emotionalState }),
 
-  onboardingSelection: null,
-  setOnboardingSelection: (onboardingSelection) => {
-    const emotionalMap: Record<string, EmotionalState> = {
-      overwhelmed: "stressed",
-      lonely: "reflective",
-      "burned-out": "stressed",
-      "just-checking": "calm",
-      anxious: "stressed",
-      confused: "reflective",
-      hopeful: "calm",
-      exhausted: "stressed",
-      frustrated: "stressed",
-      peaceful: "calm",
-    };
-    set({
-      onboardingSelection,
-      emotionalState: onboardingSelection
-        ? emotionalMap[onboardingSelection] || "neutral"
-        : "neutral",
-    });
-  },
+      onboardingSelection: null,
+      setOnboardingSelection: (onboardingSelection) => {
+        const emotionalMap: Record<string, EmotionalState> = {
+          overwhelmed: "stressed",
+          lonely: "reflective",
+          "burned-out": "stressed",
+          "just-checking": "calm",
+          anxious: "stressed",
+          confused: "reflective",
+          hopeful: "calm",
+          exhausted: "stressed",
+          frustrated: "stressed",
+          peaceful: "calm",
+        };
+        set({
+          onboardingSelection,
+          emotionalState: onboardingSelection
+            ? emotionalMap[onboardingSelection] || "neutral"
+            : "neutral",
+        });
+      },
 
-  assessmentAnswers: [],
-  addAnswer: (answer) =>
-    set((state) => ({
-      assessmentAnswers: [
-        ...state.assessmentAnswers.filter(
-          (a) => a.questionId !== answer.questionId
-        ),
-        answer,
-      ],
-    })),
-  resetAssessment: () => set({ assessmentAnswers: [], stressProfile: null, personalizedRecommendations: null }),
+      assessmentAnswers: [],
+      addAnswer: (answer) =>
+        set((state) => ({
+          assessmentAnswers: [
+            ...state.assessmentAnswers.filter(
+              (a) => a.questionId !== answer.questionId
+            ),
+            answer,
+          ],
+        })),
+      resetAssessment: () => set({ assessmentAnswers: [], stressProfile: null, personalizedRecommendations: null }),
 
-  stressProfile: null,
-  setStressProfile: (stressProfile) => set({ stressProfile }),
+      stressProfile: null,
+      setStressProfile: (stressProfile) => set({ stressProfile }),
 
-  personalizedRecommendations: null,
-  setPersonalizedRecommendations: (personalizedRecommendations) => set({ personalizedRecommendations }),
+      personalizedRecommendations: null,
+      setPersonalizedRecommendations: (personalizedRecommendations) => set({ personalizedRecommendations }),
 
-  hasSeenBreathingIntro: false,
-  setHasSeenBreathingIntro: (hasSeenBreathingIntro) =>
-    set({ hasSeenBreathingIntro }),
+      hasSeenBreathingIntro: false,
+      setHasSeenBreathingIntro: (hasSeenBreathingIntro) =>
+        set({ hasSeenBreathingIntro }),
 
-  reducedMotion: false,
-  toggleReducedMotion: () =>
-    set((state) => ({ reducedMotion: !state.reducedMotion })),
+      reducedMotion: false,
+      toggleReducedMotion: () =>
+        set((state) => ({ reducedMotion: !state.reducedMotion })),
 
-  highContrast: false,
-  toggleHighContrast: () =>
-    set((state) => ({ highContrast: !state.highContrast })),
+      highContrast: false,
+      toggleHighContrast: () =>
+        set((state) => ({ highContrast: !state.highContrast })),
 
-  crisisModalOpen: false,
-  setCrisisModalOpen: (crisisModalOpen) => set({ crisisModalOpen }),
+      crisisModalOpen: false,
+      setCrisisModalOpen: (crisisModalOpen) => set({ crisisModalOpen }),
 
-  user: null,
-  isAuthenticated: false,
-  profileModalOpen: false,
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
-  setProfileModalOpen: (profileModalOpen) => set({ profileModalOpen }),
-  logout: () => set({ user: null, isAuthenticated: false, profileModalOpen: false }),
+      user: null,
+      isAuthenticated: false,
+      profileModalOpen: false,
+      setUser: (user) => set({ user, isAuthenticated: !!user }),
+      setProfileModalOpen: (profileModalOpen) => set({ profileModalOpen }),
+      logout: () => set({ user: null, isAuthenticated: false, profileModalOpen: false }),
 
-  notifications: {
-    assessmentReminders: true,
-    weeklyInsights: true,
-    emergencyAlerts: true,
-  },
-  toggleNotification: (setting) =>
-    set((state) => ({
       notifications: {
-        ...state.notifications,
-        [setting]: !state.notifications[setting],
+        assessmentReminders: true,
+        weeklyInsights: true,
+        emergencyAlerts: true,
       },
-    })),
+      toggleNotification: (setting) =>
+        set((state) => ({
+          notifications: {
+            ...state.notifications,
+            [setting]: !state.notifications[setting],
+          },
+        })),
 
-  privacySettings: {
-    dataCollection: false,
-    analytics: false,
-    personalizedContent: false,
-  },
-  togglePrivacySetting: (setting) =>
-    set((state) => ({
       privacySettings: {
-        ...state.privacySettings,
-        [setting]: !state.privacySettings[setting],
+        dataCollection: false,
+        analytics: false,
+        personalizedContent: false,
       },
-    })),
-}));
+      togglePrivacySetting: (setting) =>
+        set((state) => ({
+          privacySettings: {
+            ...state.privacySettings,
+            [setting]: !state.privacySettings[setting],
+          },
+        })),
+    }),
+    {
+      name: 'vyana-storage',
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+        notifications: state.notifications,
+        privacySettings: state.privacySettings,
+        hasSeenBreathingIntro: state.hasSeenBreathingIntro,
+        reducedMotion: state.reducedMotion,
+        highContrast: state.highContrast,
+      }),
+    }
+  )
+);

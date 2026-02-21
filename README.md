@@ -119,13 +119,4 @@ FIREBASE_CONFIG=...
 
 ---
 
-## 🎨 Design Philosophy
-
-Vyana follows a **Biophilic Design** approach:
-- **Color Palette:** Sage greens, warm wheats, and soft lavenders to minimize cognitive load.
-- **Glassmorphism:** Using depth and blur to maintain focus on primary actions.
-- **Human-Centric Motion:** Animations are timed (400ms-700ms) to mirror natural human respiratory rhythms.
-
----
-
 *Vyana: Harmonizing technology and empathy for a clearer mind.*

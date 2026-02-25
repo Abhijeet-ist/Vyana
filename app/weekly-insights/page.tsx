@@ -250,6 +250,7 @@ export default function WeeklyInsightsPage() {
   const router = useRouter();
   const { weeklyEntries, deleteWeeklyEntry, clearWeeklyEntries } = useAppStore();
   const [confirmClear, setConfirmClear] = useState(false);
+  const [highlightedSeries, setHighlightedSeries] = useState<"Overall" | "Cognitive" | "Stress" | "Behavior" | null>(null);
 
   /* Chart data — oldest first */
   const chartData = useMemo(() => {
@@ -463,11 +464,21 @@ export default function WeeklyInsightsPage() {
           <motion.div variants={fadeInUp} className="grid grid-cols-4 gap-2">
             {statCards.map((s) => {
               const Icon = s.icon;
+              const isActive = highlightedSeries === s.label;
+              const isDimmed = highlightedSeries !== null && !isActive;
               return (
-                <div
+                <motion.button
                   key={s.label}
-                  className="flex flex-col items-center gap-1.5 rounded-2xl p-3"
-                  style={{ backgroundColor: s.bg }}
+                  type="button"
+                  onClick={() => setHighlightedSeries(isActive ? null : s.label as typeof highlightedSeries)}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center gap-1.5 rounded-2xl p-3 transition-all duration-300 focus:outline-none"
+                  style={{
+                    backgroundColor: s.bg,
+                    opacity: isDimmed ? 0.45 : 1,
+                    boxShadow: isActive ? `0 0 0 2px ${s.color}40, 0 4px 12px ${s.color}20` : "none",
+                    transform: isActive ? "translateY(-2px)" : "none",
+                  }}
                 >
                   <Icon className="h-4 w-4" strokeWidth={1.75} style={{ color: s.color }} />
                   <p className="text-[15px] font-bold" style={{ color: s.color }}>
@@ -476,7 +487,7 @@ export default function WeeklyInsightsPage() {
                   <p className="text-[9px] font-medium uppercase tracking-wide text-center leading-tight" style={{ color: s.color + "99" }}>
                     {s.label}
                   </p>
-                </div>
+                </motion.button>
               );
             })}
           </motion.div>
@@ -531,10 +542,50 @@ export default function WeeklyInsightsPage() {
                     iconSize={6}
                     wrapperStyle={{ fontSize: "10px", paddingTop: "8px" }}
                   />
-                  <Area type="monotone" dataKey="Overall" stroke="hsl(135 12% 26%)" strokeWidth={2} fill="url(#gradOverall)" dot={{ r: 3, fill: "hsl(135 12% 26%)", strokeWidth: 0 }} activeDot={{ r: 5 }} />
-                  <Area type="monotone" dataKey="Cognitive" stroke="hsl(260 18% 54%)" strokeWidth={1.5} fill="url(#gradCog)" dot={{ r: 2.5, fill: "hsl(260 18% 54%)", strokeWidth: 0 }} activeDot={{ r: 4 }} />
-                  <Area type="monotone" dataKey="Stress" stroke="hsl(17 55% 52%)" strokeWidth={1.5} fill="url(#gradStr)" dot={{ r: 2.5, fill: "hsl(17 55% 52%)", strokeWidth: 0 }} activeDot={{ r: 4 }} />
-                  <Area type="monotone" dataKey="Behavior" stroke="hsl(105 15% 43%)" strokeWidth={1.5} fill="url(#gradBeh)" dot={{ r: 2.5, fill: "hsl(105 15% 43%)", strokeWidth: 0 }} activeDot={{ r: 4 }} />
+                  <Area
+                    type="monotone"
+                    dataKey="Overall"
+                    stroke="hsl(135 12% 26%)"
+                    strokeWidth={highlightedSeries === "Overall" ? 3 : 2}
+                    strokeOpacity={!highlightedSeries || highlightedSeries === "Overall" ? 1 : 0.15}
+                    fill="url(#gradOverall)"
+                    fillOpacity={!highlightedSeries || highlightedSeries === "Overall" ? 1 : 0.05}
+                    dot={!highlightedSeries || highlightedSeries === "Overall" ? { r: 3, fill: "hsl(135 12% 26%)", strokeWidth: 0 } : false}
+                    activeDot={!highlightedSeries || highlightedSeries === "Overall" ? { r: 5 } : false}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Cognitive"
+                    stroke="hsl(260 18% 54%)"
+                    strokeWidth={highlightedSeries === "Cognitive" ? 3 : 1.5}
+                    strokeOpacity={!highlightedSeries || highlightedSeries === "Cognitive" ? 1 : 0.15}
+                    fill="url(#gradCog)"
+                    fillOpacity={!highlightedSeries || highlightedSeries === "Cognitive" ? 1 : 0.05}
+                    dot={!highlightedSeries || highlightedSeries === "Cognitive" ? { r: 2.5, fill: "hsl(260 18% 54%)", strokeWidth: 0 } : false}
+                    activeDot={!highlightedSeries || highlightedSeries === "Cognitive" ? { r: 4 } : false}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Stress"
+                    stroke="hsl(17 55% 52%)"
+                    strokeWidth={highlightedSeries === "Stress" ? 3 : 1.5}
+                    strokeOpacity={!highlightedSeries || highlightedSeries === "Stress" ? 1 : 0.15}
+                    fill="url(#gradStr)"
+                    fillOpacity={!highlightedSeries || highlightedSeries === "Stress" ? 1 : 0.05}
+                    dot={!highlightedSeries || highlightedSeries === "Stress" ? { r: 2.5, fill: "hsl(17 55% 52%)", strokeWidth: 0 } : false}
+                    activeDot={!highlightedSeries || highlightedSeries === "Stress" ? { r: 4 } : false}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Behavior"
+                    stroke="hsl(105 15% 43%)"
+                    strokeWidth={highlightedSeries === "Behavior" ? 3 : 1.5}
+                    strokeOpacity={!highlightedSeries || highlightedSeries === "Behavior" ? 1 : 0.15}
+                    fill="url(#gradBeh)"
+                    fillOpacity={!highlightedSeries || highlightedSeries === "Behavior" ? 1 : 0.05}
+                    dot={!highlightedSeries || highlightedSeries === "Behavior" ? { r: 2.5, fill: "hsl(105 15% 43%)", strokeWidth: 0 } : false}
+                    activeDot={!highlightedSeries || highlightedSeries === "Behavior" ? { r: 4 } : false}
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </motion.div>

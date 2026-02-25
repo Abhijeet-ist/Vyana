@@ -123,7 +123,7 @@ export default function AuthPage() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const router = useRouter();
-  const { setUser } = useAppStore();
+  const { setUser, loadWeeklyEntries } = useAppStore();
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -158,6 +158,9 @@ export default function AuthPage() {
         email: result.user.email,
         avatar: result.user.avatar,
       });
+
+      // Load persisted weekly entries from server
+      await loadWeeklyEntries();
 
       setSuccess("Welcome back! Redirecting...");
       setTimeout(() => router.push("/"), 1500);
@@ -217,6 +220,9 @@ export default function AuthPage() {
         email: firebaseUser.email || "",
         avatar: firebaseUser.photoURL || undefined,
       });
+
+      // Load persisted weekly entries from server
+      await loadWeeklyEntries();
 
       setSuccess("Welcome! Redirecting...");
       setTimeout(() => router.push("/"), 1500);

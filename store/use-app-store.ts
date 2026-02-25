@@ -62,6 +62,7 @@ interface AppState {
   saveWeeklyEntry: (entry: { emotionalState: EmotionalState; stressProfile: StressProfile; insights: InsightCard[]; note?: string }) => void;
   deleteWeeklyEntry: (id: string) => void;
   clearWeeklyEntries: () => void;
+  loadWeeklyEntries: () => Promise<void>;
 
   /* Notifications */
   notifications: {
@@ -82,7 +83,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       emotionalState: "neutral",
       setEmotionalState: (emotionalState) => set({ emotionalState }),
 
@@ -147,31 +148,84 @@ export const useAppStore = create<AppState>()(
       setUser: (user) => set({ user, isAuthenticated: !!user }),
       setProfileModalOpen: (profileModalOpen) => set({ profileModalOpen }),
       logout: () => {
-        // Clear persisted storage
-        localStorage.removeItem('vyana-storage');
-        set({ user: null, isAuthenticated: false, profileModalOpen: false });
+        // Clear auth state but preserve weeklyEntries in local cache
+        // (the real data lives in MongoDB per user)
+        set({
+          user: null,
+          isAuthenticated: false,
+          profileModalOpen: false,
+          weeklyEntries: [],
+          assessmentAnswers: [],
+          stressProfile: null,
+          personalizedRecommendations: null,
+          onboardingSelection: null,
+          emotionalState: "neutral",
+        });
       },
 
       weeklyEntries: [],
-      saveWeeklyEntry: ({ emotionalState, stressProfile, insights, note }) =>
-        set((state) => ({
-          weeklyEntries: [
-            {
-              id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-              date: new Date().toISOString(),
-              emotionalState,
-              stressProfile,
-              insights,
-              note,
-            },
-            ...state.weeklyEntries,
-          ],
-        })),
-      deleteWeeklyEntry: (id) =>
-        set((state) => ({
-          weeklyEntries: state.weeklyEntries.filter((e) => e.id !== id),
-        })),
-      clearWeeklyEntries: () => set({ weeklyEntries: [] }),
+      saveWeeklyEntry: ({ emotionalState, stressProfile, insights, note }) => {
+        const state = get();
+
+        // Respect the weekly insights toggle — if off, don't save
+        if (!state.notifications.weeklyInsights) return;
+
+        const newEntry: WeeklyEntry = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          date: new Date().toISOString(),
+          emotionalState,
+          stressProfile,
+          insights,
+          note,
+        };
+
+        set({ weeklyEntries: [newEntry, ...state.weeklyEntries] });
+
+        // Persist to MongoDB if authenticated
+        if (state.user?.id) {
+          fetch('/api/weekly-insights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: state.user.id, entry: newEntry }),
+          }).catch((err) => console.error('Failed to sync entry to server:', err));
+        }
+      },
+      deleteWeeklyEntry: (id) => {
+        const state = get();
+        set({ weeklyEntries: state.weeklyEntries.filter((e) => e.id !== id) });
+
+        // Sync deletion to MongoDB
+        if (state.user?.id) {
+          fetch(`/api/weekly-insights?userId=${state.user.id}&entryId=${id}`, {
+            method: 'DELETE',
+          }).catch((err) => console.error('Failed to delete entry on server:', err));
+        }
+      },
+      clearWeeklyEntries: () => {
+        const state = get();
+        set({ weeklyEntries: [] });
+
+        // Sync clear-all to MongoDB
+        if (state.user?.id) {
+          fetch(`/api/weekly-insights?userId=${state.user.id}&clearAll=true`, {
+            method: 'DELETE',
+          }).catch((err) => console.error('Failed to clear entries on server:', err));
+        }
+      },
+      loadWeeklyEntries: async () => {
+        const state = get();
+        if (!state.user?.id) return;
+
+        try {
+          const res = await fetch(`/api/weekly-insights?userId=${state.user.id}`);
+          if (res.ok) {
+            const data = await res.json();
+            set({ weeklyEntries: data.entries || [] });
+          }
+        } catch (err) {
+          console.error('Failed to load weekly entries from server:', err);
+        }
+      },
 
       notifications: {
         assessmentReminders: true,

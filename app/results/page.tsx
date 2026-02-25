@@ -13,7 +13,7 @@ import { BookOpen, CheckCircle2, RotateCcw, ArrowLeft, TrendingUp } from "lucide
 
 export default function ResultsPage() {
   const router = useRouter();
-  const { stressProfile, assessmentAnswers, personalizedRecommendations, resetAssessment, emotionalState, saveWeeklyEntry } = useAppStore();
+  const { stressProfile, assessmentAnswers, personalizedRecommendations, resetAssessment, emotionalState, saveWeeklyEntry, notifications } = useAppStore();
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
@@ -27,8 +27,11 @@ export default function ResultsPage() {
     return assembleInsights(stressProfile);
   }, [stressProfile]);
 
+  const weeklyInsightsEnabled = notifications.weeklyInsights;
+
   const handleSaveToInsights = () => {
     if (!stressProfile) return;
+    if (!weeklyInsightsEnabled) return; // Don't save if toggle is off
     saveWeeklyEntry({ emotionalState, stressProfile, insights });
     setSaved(true);
   };
@@ -140,27 +143,47 @@ export default function ResultsPage() {
         </Link>
 
         {/* Save to Weekly Insights */}
-        <button
-          type="button"
-          onClick={saved ? () => router.push("/weekly-insights") : handleSaveToInsights}
-          className="flex items-center justify-center gap-2 rounded-2xl py-4 text-sm font-semibold transition-all duration-300"
-          style={{
-            backgroundColor: saved ? "hsl(108 22% 80% / 0.45)" : "hsl(108 22% 80% / 0.35)",
-            color: saved ? "hsl(105 15% 35%)" : "hsl(105 15% 43%)",
-          }}
-        >
-          {saved ? (
-            <>
-              <TrendingUp className="h-4 w-4" strokeWidth={1.75} />
-              View weekly insights
-            </>
-          ) : (
-            <>
-              <CheckCircle2 className="h-4 w-4" strokeWidth={1.75} />
-              Save to weekly insights
-            </>
-          )}
-        </button>
+        {!weeklyInsightsEnabled ? (
+          <div
+            className="flex flex-col items-center gap-1 rounded-2xl py-4 text-center"
+            style={{
+              backgroundColor: "hsl(33 30% 86% / 0.4)",
+            }}
+          >
+            <span className="text-sm font-medium" style={{ color: "hsl(135 12% 26% / 0.4)" }}>
+              Weekly insights saving is off
+            </span>
+            <Link
+              href="/settings"
+              className="text-xs underline"
+              style={{ color: "hsl(105 15% 43%)" }}
+            >
+              Enable in settings
+            </Link>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={saved ? () => router.push("/weekly-insights") : handleSaveToInsights}
+            className="flex items-center justify-center gap-2 rounded-2xl py-4 text-sm font-semibold transition-all duration-300"
+            style={{
+              backgroundColor: saved ? "hsl(108 22% 80% / 0.45)" : "hsl(108 22% 80% / 0.35)",
+              color: saved ? "hsl(105 15% 35%)" : "hsl(105 15% 43%)",
+            }}
+          >
+            {saved ? (
+              <>
+                <TrendingUp className="h-4 w-4" strokeWidth={1.75} />
+                View weekly insights
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="h-4 w-4" strokeWidth={1.75} />
+                Save to weekly insights
+              </>
+            )}
+          </button>
+        )}
 
         <button
           type="button"

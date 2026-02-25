@@ -70,7 +70,7 @@ const buttonHoverVariants = {
 };
 
 export function ProfileDialog() {
-  const { profileModalOpen, setProfileModalOpen, user, isAuthenticated, setUser, logout } = useAppStore();
+  const { profileModalOpen, setProfileModalOpen, user, isAuthenticated, setUser, logout, loadWeeklyEntries } = useAppStore();
   const [loadingProvider, setLoadingProvider] = useState<"google" | "github" | null>(null);
   const router = useRouter();
 
@@ -93,6 +93,8 @@ export function ProfileDialog() {
       };
 
       setUser(nextUser);
+      // Load persisted weekly entries from server
+      await loadWeeklyEntries();
       setProfileModalOpen(false);
     } catch (error) {
       console.error("Social login error:", error);

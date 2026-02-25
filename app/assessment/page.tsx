@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store/use-app-store";
@@ -26,8 +26,21 @@ export default function AssessmentPage() {
     }
   }, [onboardingSelection, router]);
 
-  // Get personalized questions based on user's emotional state
-  const assessmentQuestions = getQuestionsForState(onboardingSelection);
+  // Get personalized questions based on user's emotional state — stable for the session
+  const questionsRef = useRef<ReturnType<typeof getQuestionsForState> | null>(null);
+  const lastSelectionRef = useRef(onboardingSelection);
+
+  // Only regenerate questions if onboardingSelection changes or assessment was reset (fresh start)
+  if (
+    !questionsRef.current ||
+    lastSelectionRef.current !== onboardingSelection ||
+    assessmentAnswers.length === 0
+  ) {
+    questionsRef.current = getQuestionsForState(onboardingSelection);
+    lastSelectionRef.current = onboardingSelection;
+  }
+
+  const assessmentQuestions = questionsRef.current;
   const totalQuestions = assessmentQuestions.length;
   const currentQuestion = assessmentQuestions[currentIndex];
   const currentAnswer = assessmentAnswers.find(
@@ -121,18 +134,22 @@ export default function AssessmentPage() {
 
         {/* Progress bar */}
         <div className="flex flex-1 items-center gap-1.5">
-          {assessmentQuestions.map((_, i) => (
-            <div
-              key={assessmentQuestions[i].id}
-              className="h-1.5 flex-1 rounded-full transition-all duration-500"
-              style={{
-                backgroundColor:
-                  i <= currentIndex
-                    ? "hsl(135 12% 26%)"
-                    : "hsl(33 30% 86%)",
-              }}
-            />
-          ))}
+          {assessmentQuestions.map((q, i) => {
+            const isAnswered = assessmentAnswers.some((a) => a.questionId === q.id);
+            const isCurrent = i === currentIndex;
+            return (
+              <div
+                key={q.id}
+                className="h-1.5 flex-1 rounded-full transition-all duration-500"
+                style={{
+                  backgroundColor:
+                    isAnswered || isCurrent
+                      ? "hsl(135 12% 26%)"
+                      : "hsl(33 30% 86%)",
+                }}
+              />
+            );
+          })}
         </div>
 
         <span className="text-xs font-medium" style={{ color: "hsl(135 12% 26% / 0.4)" }}>

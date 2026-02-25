@@ -9,6 +9,7 @@ import {
   EyeOff,
   Activity,
   HeartHandshake,
+  MessageCircle,
 } from "lucide-react";
 import { useAppStore } from "@/store/use-app-store";
 import { LandingPage } from "@/components/landing-page";
@@ -130,6 +131,27 @@ export default function HomePage() {
         <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
           {"Today's practices"}
         </p>
+
+        <Link
+          href="/chatbot"
+          className="flex items-center justify-between rounded-2xl p-5"
+          style={{ backgroundColor: "hsl(260 18% 84% / 0.55)", border: "1px solid hsl(260 18% 84% / 0.3)" }}
+        >
+          <div className="flex flex-col gap-1">
+            <span className="text-base font-semibold" style={{ color: "hsl(135 12% 26%)" }}>
+              Talk to Clarity
+            </span>
+            <span className="text-xs" style={{ color: "hsl(135 12% 26% / 0.55)" }}>
+              A safe space to share what&apos;s on your mind
+            </span>
+          </div>
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full"
+            style={{ backgroundColor: "hsl(260 25% 65%)" }}
+          >
+            <MessageCircle className="h-4 w-4" style={{ color: "hsl(0 0% 100% / 0.9)" }} />
+          </div>
+        </Link>
 
         <Link
           href="/assessment"

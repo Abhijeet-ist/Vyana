@@ -9,6 +9,8 @@ import type {
   StressProfile,
   User,
   PersonalizedRecommendations,
+  WeeklyEntry,
+  InsightCard,
 } from "@/types";
 
 interface AppState {
@@ -54,6 +56,12 @@ interface AppState {
   setUser: (user: User | null) => void;
   setProfileModalOpen: (open: boolean) => void;
   logout: () => void;
+
+  /* Weekly Insights History */
+  weeklyEntries: WeeklyEntry[];
+  saveWeeklyEntry: (entry: { emotionalState: EmotionalState; stressProfile: StressProfile; insights: InsightCard[]; note?: string }) => void;
+  deleteWeeklyEntry: (id: string) => void;
+  clearWeeklyEntries: () => void;
 
   /* Notifications */
   notifications: {
@@ -144,6 +152,27 @@ export const useAppStore = create<AppState>()(
         set({ user: null, isAuthenticated: false, profileModalOpen: false });
       },
 
+      weeklyEntries: [],
+      saveWeeklyEntry: ({ emotionalState, stressProfile, insights, note }) =>
+        set((state) => ({
+          weeklyEntries: [
+            {
+              id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+              date: new Date().toISOString(),
+              emotionalState,
+              stressProfile,
+              insights,
+              note,
+            },
+            ...state.weeklyEntries,
+          ],
+        })),
+      deleteWeeklyEntry: (id) =>
+        set((state) => ({
+          weeklyEntries: state.weeklyEntries.filter((e) => e.id !== id),
+        })),
+      clearWeeklyEntries: () => set({ weeklyEntries: [] }),
+
       notifications: {
         assessmentReminders: true,
         weeklyInsights: true,
@@ -180,6 +209,7 @@ export const useAppStore = create<AppState>()(
         hasSeenBreathingIntro: state.hasSeenBreathingIntro,
         reducedMotion: state.reducedMotion,
         highContrast: state.highContrast,
+        weeklyEntries: state.weeklyEntries,
       }),
     }
   )

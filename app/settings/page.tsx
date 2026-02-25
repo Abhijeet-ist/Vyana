@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAppStore } from "@/store/use-app-store";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-import { Eye, Gauge, RotateCcw, Shield } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Bell, Eye, Gauge, Globe, RotateCcw, Shield } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 export default function SettingsPage() {
@@ -13,6 +14,8 @@ export default function SettingsPage() {
     highContrast,
     toggleHighContrast,
     resetAssessment,
+    notifications,
+    toggleNotification,
   } = useAppStore();
 
   return (
@@ -33,6 +36,115 @@ export default function SettingsPage() {
         >
           Adjust your <span className="font-bold">experience</span>
         </h1>
+      </motion.div>
+
+      {/* Notifications */}
+      <motion.div variants={fadeInUp} className="flex flex-col gap-3">
+        <p
+          className="text-xs font-semibold uppercase tracking-wide"
+          style={{ color: "hsl(135 12% 26% / 0.35)" }}
+        >
+          Notifications
+        </p>
+
+        {/* Assessment reminders */}
+        <div
+          className="flex items-center justify-between rounded-2xl p-5"
+          style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ backgroundColor: "hsl(260 18% 84% / 0.4)" }}
+            >
+              <Bell className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(260 18% 54%)" }} />
+            </div>
+            <div>
+              <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                Assessment reminders
+              </p>
+              <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
+                Daily check-in notifications
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={notifications.assessmentReminders}
+            onCheckedChange={() => toggleNotification("assessmentReminders")}
+            className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
+            style={{ boxShadow: "0 2px 8px hsl(var(--seaweed) / 0.1)" }}
+          />
+        </div>
+
+        {/* Weekly insights */}
+        <div
+          className="rounded-2xl"
+          style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
+        >
+          <div className="flex items-center justify-between p-5 pb-3">
+            <div className="flex items-center gap-3">
+              <div
+                className="flex h-9 w-9 items-center justify-center rounded-full"
+                style={{ backgroundColor: "hsl(108 22% 80% / 0.4)" }}
+              >
+                <Globe className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(105 15% 43%)" }} />
+              </div>
+              <div>
+                <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                  Weekly insights
+                </p>
+                <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
+                  Summary of your mental health journey
+                </p>
+              </div>
+            </div>
+            <Switch
+              checked={notifications.weeklyInsights}
+              onCheckedChange={() => toggleNotification("weeklyInsights")}
+              className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
+              style={{ boxShadow: "0 2px 8px hsl(var(--seaweed) / 0.1)" }}
+            />
+          </div>
+          <div className="px-5 pb-4">
+            <Link
+              href="/weekly-insights"
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200"
+              style={{ backgroundColor: "hsl(108 22% 80% / 0.35)", color: "hsl(105 15% 35%)" }}
+            >
+              <ArrowUpRight className="h-3 w-3" strokeWidth={2} />
+              View your journey
+            </Link>
+          </div>
+        </div>
+
+        {/* Emergency alerts */}
+        <div
+          className="flex items-center justify-between rounded-2xl p-5"
+          style={{ backgroundColor: "hsl(0 0% 100% / 0.7)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full"
+              style={{ backgroundColor: "hsl(17 55% 62% / 0.15)" }}
+            >
+              <AlertTriangle className="h-4 w-4" strokeWidth={1.75} style={{ color: "hsl(17 55% 52%)" }} />
+            </div>
+            <div>
+              <p className="text-sm font-medium" style={{ color: "hsl(135 12% 26%)" }}>
+                Emergency alerts
+              </p>
+              <p className="text-xs" style={{ color: "hsl(135 12% 26% / 0.45)" }}>
+                Critical mental health support notifications
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={notifications.emergencyAlerts}
+            onCheckedChange={() => toggleNotification("emergencyAlerts")}
+            className="data-[state=checked]:bg-[hsl(var(--seaweed))] data-[state=unchecked]:bg-[hsl(var(--warm-beige))]"
+            style={{ boxShadow: "0 2px 8px hsl(var(--seaweed) / 0.1)" }}
+          />
+        </div>
       </motion.div>
 
       {/* Accessibility */}

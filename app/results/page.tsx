@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -9,11 +9,12 @@ import { assembleInsights } from "@/lib/insights";
 import { EmotionalVisualization } from "@/components/emotional-visualization";
 import { InsightCard } from "@/components/insight-card";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-import { RotateCcw, BookOpen, ArrowLeft } from "lucide-react";
+import { BookOpen, CheckCircle2, RotateCcw, ArrowLeft, TrendingUp } from "lucide-react";
 
 export default function ResultsPage() {
   const router = useRouter();
-  const { stressProfile, assessmentAnswers, personalizedRecommendations, resetAssessment } = useAppStore();
+  const { stressProfile, assessmentAnswers, personalizedRecommendations, resetAssessment, emotionalState, saveWeeklyEntry } = useAppStore();
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (!stressProfile || assessmentAnswers.length === 0) {
@@ -25,6 +26,12 @@ export default function ResultsPage() {
     if (!stressProfile) return [];
     return assembleInsights(stressProfile);
   }, [stressProfile]);
+
+  const handleSaveToInsights = () => {
+    if (!stressProfile) return;
+    saveWeeklyEntry({ emotionalState, stressProfile, insights });
+    setSaved(true);
+  };
 
   if (!stressProfile) return null;
 
@@ -131,6 +138,29 @@ export default function ResultsPage() {
           <BookOpen className="h-4 w-4" strokeWidth={1.75} />
           View resources
         </Link>
+
+        {/* Save to Weekly Insights */}
+        <button
+          type="button"
+          onClick={saved ? () => router.push("/weekly-insights") : handleSaveToInsights}
+          className="flex items-center justify-center gap-2 rounded-2xl py-4 text-sm font-semibold transition-all duration-300"
+          style={{
+            backgroundColor: saved ? "hsl(108 22% 80% / 0.45)" : "hsl(108 22% 80% / 0.35)",
+            color: saved ? "hsl(105 15% 35%)" : "hsl(105 15% 43%)",
+          }}
+        >
+          {saved ? (
+            <>
+              <TrendingUp className="h-4 w-4" strokeWidth={1.75} />
+              View weekly insights
+            </>
+          ) : (
+            <>
+              <CheckCircle2 className="h-4 w-4" strokeWidth={1.75} />
+              Save to weekly insights
+            </>
+          )}
+        </button>
 
         <button
           type="button"

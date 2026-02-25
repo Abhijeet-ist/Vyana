@@ -107,3 +107,12 @@ export interface PersonalizedRecommendations {
   music: MusicRecommendation[];
   confidenceScore: number;
 }
+
+export interface WeeklyEntry {
+  id: string;
+  date: string; // ISO 8601 date string
+  emotionalState: EmotionalState;
+  stressProfile: StressProfile;
+  insights: InsightCard[];
+  note?: string;
+}
